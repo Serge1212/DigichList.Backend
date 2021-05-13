@@ -1,8 +1,13 @@
-using DigichList.Infrastructure.Seeders;
+using DigichList.Core.Repositories;
+using DigichList.Core.Repositories.Base;
+using DigichList.Infrastructure.Data;
+using DigichList.Infrastructure.Repositories;
+using DigichList.Infrastructure.Repositories.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +32,12 @@ namespace DigichList.Backend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddLogging(configure => configure.AddConsole());
+            services.AddScoped<IDefectImageRepository, DefectImageRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IDefectRepository, DefectRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddDbContext<DigichListContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,7 +46,7 @@ namespace DigichList.Backend
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                new ContextSeed().SeedDatabase().Wait();   
+                
             }
 
             app.UseHttpsRedirection();

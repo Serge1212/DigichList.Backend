@@ -1,10 +1,8 @@
 ﻿using DigichList.Core.Entities;
+using DigichList.Core.Repositories;
 using DigichList.Core.Repositories.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -13,9 +11,9 @@ namespace DigichList.Backend.Controllers
     [ApiController]
     public class DefectController : ControllerBase
     {
-        private IRepository<Defect, int> _repo;
+        private IDefectRepository _repo;
 
-        public DefectController(IRepository<Defect, int> repo)
+        public DefectController(IDefectRepository repo)
         {
             _repo = repo;
         }

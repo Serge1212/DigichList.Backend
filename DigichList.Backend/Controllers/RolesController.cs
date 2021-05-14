@@ -1,10 +1,8 @@
 ﻿using DigichList.Core.Entities;
+using DigichList.Core.Repositories;
 using DigichList.Core.Repositories.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -13,9 +11,9 @@ namespace DigichList.Backend.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
-        private IRepository<Role, int> _repo;
+        private readonly IRoleRepository _repo;
 
-        public RolesController(IRepository<Role, int> repo)
+        public RolesController(IRoleRepository repo)
         {
             _repo = repo;
         }
@@ -67,11 +65,11 @@ namespace DigichList.Backend.Controllers
             var exsistingRole = _repo.GetById(id);
             if (exsistingRole != null)
             {
-                //deefct.Id = exsistingDefect.Id;
+                //role.Id = exsistingRole.Id;
                 await _repo.UpdateAsync(role);
                 return Ok();
             }
-            return Ok(role);
+            return Ok();
         }
     }
 }

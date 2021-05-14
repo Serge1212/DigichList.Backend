@@ -10,9 +10,9 @@ namespace DigichList.Backend.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IRepository<User,int> _repo;
+        private readonly IUserRepository _repo;
 
-        public UsersController(IRepository<User, int> repo)
+        public UsersController(IUserRepository repo)
         {
             _repo = repo;
         }

@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DigichList.Data\DigichList.Infrastructure.csproj" />
+    <ProjectReference Include="C:\Users\Acer\Desktop\DigichList.TelegramBot-master\DigichList.Core\DigichList.Core.csproj" />
+    <ProjectReference Include="C:\Users\Acer\Desktop\DigichList.TelegramBot-master\DigichList.Data\DigichList.Infrastructure.csproj" />
   </ItemGroup>
 
 

@@ -1,4 +1,5 @@
-﻿using DigichList.Core.Entities;
+﻿
+using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using DigichList.Infrastructure.Data;
 using DigichList.Infrastructure.Repositories.Base;

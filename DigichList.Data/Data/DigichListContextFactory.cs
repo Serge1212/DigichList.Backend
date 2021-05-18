@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace DigichList.Infrastructure.Data
 {
-    public class DigichListContextFactory : IDesignTimeDbContextFactory<DigichListContext>
+    internal class DigichListContextFactory : IDesignTimeDbContextFactory<DigichListContext>
     {
         public DigichListContext CreateDbContext(string[] args)
         {

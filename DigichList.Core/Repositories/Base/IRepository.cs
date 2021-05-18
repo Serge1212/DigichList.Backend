@@ -9,7 +9,7 @@ namespace DigichList.Core.Repositories.Base
     {
         public Task<IReadOnlyList<T>> GetAllAsync();
         public Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate);
-        public Task<T> GetById(K id);
+        public Task<T> GetByIdAsync(K id);
         public Task AddAsync(T entity);
         public Task DeleteAsync(T entity);
         public Task UpdateAsync(T entity);

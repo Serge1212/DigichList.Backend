@@ -28,7 +28,7 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _repo.GetById(id);
+            var user = await _repo.GetByIdAsync(id);
             if (user != null)
             {
                 return Ok(user);
@@ -48,7 +48,7 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _repo.GetById(id);
+            var user = await _repo.GetByIdAsync(id);
             if (user != null)
             {
                 await _repo.DeleteAsync(user);
@@ -61,7 +61,7 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> EditUser(int id, User user)
         {
-            var exsistingUser = _repo.GetById(id);
+            var exsistingUser = _repo.GetByIdAsync(id);
             if (exsistingUser != null)
             {
                 //user.Id = exsistingUser.Id;

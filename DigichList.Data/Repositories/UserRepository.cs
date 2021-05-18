@@ -11,9 +11,14 @@ namespace DigichList.Infrastructure.Repositories
     {
         public UserRepository(DigichListContext context) : base(context) { }
        
-        public async Task<User> GetUserByTelegramId(int telegramId)
+        public async Task<User> GetUserByTelegramIdAsync(int telegramId)
         {
             return await _context.Users.GetUserByTelegramId(telegramId);
+        }
+
+        public async Task<User> GetUserByTelegramIdWithRoleAsync(int telegramId)
+        {
+            return await _context.Users.GetUserByTelegramIdWithRole(telegramId);
         }
     }
 }

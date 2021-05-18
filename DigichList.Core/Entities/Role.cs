@@ -8,6 +8,7 @@ namespace DigichList.Core.Entities
         
         public string Name { get; set; }
         public bool CanPublishDefects { get; set; } = false;
+        public bool CanFixDefects { get; set; } = false;
         public List<User> Users { get; set; } = new List<User>();
 
     }

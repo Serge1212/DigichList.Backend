@@ -27,7 +27,7 @@ namespace DigichList.Infrastructure.Repositories.Base
             return await _context.Set<T>().Where(predicate).ToListAsync();
         }
 
-        public async Task<T> GetById(K id)
+        public async Task<T> GetByIdAsync(K id)
         {
             return await _context.Set<T>().FindAsync(id);
         }

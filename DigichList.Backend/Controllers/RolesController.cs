@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
     {
@@ -29,7 +28,7 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetRole(int id)
         {
-            var defect = await _repo.GetById(id);
+            var defect = await _repo.GetByIdAsync(id);
             if (defect != null)
             {
                 return Ok(defect);
@@ -49,7 +48,7 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> DeleteRole(int id)
         {
-            var role = await _repo.GetById(id);
+            var role = await _repo.GetByIdAsync(id);
             if (role != null)
             {
                 await _repo.DeleteAsync(role);
@@ -62,7 +61,7 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> EditRole(int id, Role role)
         {
-            var exsistingRole = _repo.GetById(id);
+            var exsistingRole = _repo.GetByIdAsync(id);
             if (exsistingRole != null)
             {
                 //role.Id = exsistingRole.Id;

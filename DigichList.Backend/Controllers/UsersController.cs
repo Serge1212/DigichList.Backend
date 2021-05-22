@@ -3,6 +3,7 @@ using DigichList.Core.Repositories;
 using DigichList.Core.Repositories.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -57,18 +58,29 @@ namespace DigichList.Backend.Controllers
             return NotFound($"user whith id: {id} was not found");
         }
 
-        [HttpPatch]
-        [Route("api/[controller]/{id}")]
-        public async Task<IActionResult> EditUser(int id, User user)
+        [HttpPost]
+        [Route("api/[controller]/UpdateUser")]
+        public async Task<IActionResult> UpdatePost([FromBody] User user)
         {
-            var exsistingUser = _repo.GetByIdAsync(id);
-            if (exsistingUser != null)
+            if (ModelState.IsValid)
             {
-                //user.Id = exsistingUser.Id;
-                await _repo.UpdateAsync(user);
-                return Ok();
+                try
+                {
+                    await _repo.UpdateAsync(user);
+
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
+                    {
+                        return NotFound();
+                    }
+
+                    return BadRequest();
+                }
             }
-            return Ok(user);
+            return BadRequest();
         }
     }
 }

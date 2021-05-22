@@ -3,6 +3,7 @@ using DigichList.Core.Repositories;
 using DigichList.Core.Repositories.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -71,18 +72,30 @@ namespace DigichList.Backend.Controllers
             return Ok();
         }
 
-        //[HttpPatch]
-        //[Route("api/[controller]/{id}")]
-        //public IActionResult EditDefect(int id, Defect defect)
-        //{
-        //    var exsistingDefect = _repo.GetByIdAsync(id);
-        //    if (exsistingDefect != null)
-        //    {
-        //        //deefct.Id = exsistingDefect.Id;
-        //        _repo.UpdateAsync(defect);
-        //        return Ok();
-        //    }
-        //    return Ok(defect);
-        //}
+        [HttpPost]
+        [Route("api/[controller]/UpdateDefect")]
+        public async Task<IActionResult> UpdatePost([FromBody] Defect defect)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _repo.UpdateAsync(defect);
+
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
+                    {
+                        return NotFound();
+                    }
+
+                    return BadRequest();
+                }
+            }
+            return BadRequest();
+        }
+
     }
 }

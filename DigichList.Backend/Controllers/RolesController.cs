@@ -3,6 +3,7 @@ using DigichList.Core.Repositories;
 using DigichList.Core.Repositories.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -38,7 +39,7 @@ namespace DigichList.Backend.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetAssignedDefect(Role role)
+        public async Task<IActionResult> GetAssignedRole(Role role)
         {
             await _repo.AddAsync(role);
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + role.Id, role);
@@ -57,18 +58,42 @@ namespace DigichList.Backend.Controllers
             return NotFound($"role whith id: {id} was not found");
         }
 
-        [HttpPatch]
-        [Route("api/[controller]/{id}")]
-        public async Task<IActionResult> EditRole(int id, Role role)
+        // [Route("api/[controller]/{id}")]
+        /*  public async Task<IActionResult> EditRole(int id, Role role)
+          {
+              var exsistingRole = _repo.GetByIdAsync(id);
+              if (exsistingRole != null)
+              {
+                  //role.Id = exsistingRole.Id;
+                  await _repo.UpdateAsync(role);
+                  return Ok();
+              }
+              return Ok();
+          }*/
+        [HttpPost]
+        [Route("api/[controller]/UpdateRole")]
+        public async Task<IActionResult> UpdateRole([FromBody] Role role)
         {
-            var exsistingRole = _repo.GetByIdAsync(id);
-            if (exsistingRole != null)
+            if (ModelState.IsValid)
             {
-                //role.Id = exsistingRole.Id;
-                await _repo.UpdateAsync(role);
-                return Ok();
+                try
+                {
+                    await _repo.UpdateAsync(role);
+
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
+                    {
+                        return NotFound();
+                    }
+
+                    return BadRequest();
+                }
             }
-            return Ok();
+            return BadRequest();
         }
+
     }
 }

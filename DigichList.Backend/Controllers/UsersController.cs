@@ -39,12 +39,12 @@ namespace DigichList.Backend.Controllers
 
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetUser(User user)
+        public async Task<IActionResult> CreateUser(User user)
         {
             await _repo.AddAsync(user);
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + user.Id, user);
         }
-
+/*
         [HttpDelete]
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
@@ -56,7 +56,7 @@ namespace DigichList.Backend.Controllers
                 return Ok();
             }
             return NotFound($"user whith id: {id} was not found");
-        }
+        }*/
 
         [HttpPost]
         [Route("api/[controller]/UpdateUser")]

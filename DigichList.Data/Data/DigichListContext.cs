@@ -11,6 +11,7 @@ namespace DigichList.Infrastructure.Data
             optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=DigichListDb;Trusted_Connection=True;");
         }
 
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Defect> Defects { get; set; }

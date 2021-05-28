@@ -41,6 +41,30 @@ namespace DigichList.Backend.Controllers
             return NotFound($"defect whith id: {id} was not found");
         }
 
+        [HttpPost]
+        [Route("api/[controller]/UpdateDefect")]
+        public async Task<IActionResult> UpdateDefect([FromBody] Defect defect)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _repo.UpdateAsync(defect);
+
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
+                    {
+                        return NotFound();
+                    }
+
+                    return BadRequest();
+                }
+            }
+            return BadRequest();
+        }
         //// create new defect
         //[HttpPost]
         //[Route("api/[controller]")]

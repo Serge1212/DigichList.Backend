@@ -4,14 +4,16 @@ using DigichList.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DigichList.Infrastructure.Migrations
 {
     [DbContext(typeof(DigichListContext))]
-    partial class DigichListContextModelSnapshot : ModelSnapshot
+    [Migration("20210528153130_added admins table")]
+    partial class addedadminstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +34,7 @@ namespace DigichList.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("Passeord")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")

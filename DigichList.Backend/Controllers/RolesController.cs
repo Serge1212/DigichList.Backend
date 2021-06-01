@@ -1,4 +1,5 @@
-﻿using DigichList.Core.Entities;
+﻿using DigichList.Backend.Helpers;
+using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using DigichList.Core.Repositories.Base;
 using Microsoft.AspNetCore.Http;
@@ -55,7 +56,7 @@ namespace DigichList.Backend.Controllers
                 await _repo.DeleteAsync(role);
                 return Ok();
             }
-            return NotFound($"role whith id: {id} was not found");
+            return NotFound($"role with id: {id} was not found");
         }
 
         [HttpPost]
@@ -64,23 +65,10 @@ namespace DigichList.Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _repo.UpdateAsync(role);
-
-                    return Ok();
-                }
-                catch (Exception ex)
-                {
-                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
-                    {
-                        return NotFound();
-                    }
-
-                    return BadRequest();
-                }
+                return await UpdateControllerMethod.UpdateAsync(role, _repo);
             }
             return BadRequest();
+            
         }
 
     }

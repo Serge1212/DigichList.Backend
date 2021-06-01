@@ -1,4 +1,5 @@
-﻿using DigichList.Backend.Options;
+﻿using DigichList.Backend.Helpers;
+using DigichList.Backend.Options;
 using DigichList.Backend.ViewModel;
 using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
@@ -71,21 +72,7 @@ namespace DigichList.Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _repo.UpdateAsync(admin);
-
-                    return Ok();
-                }
-                catch (Exception ex)
-                {
-                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
-                    {
-                        return NotFound();
-                    }
-
-                    return BadRequest();
-                }
+                return await UpdateControllerMethod.UpdateAsync(admin, _repo);
             }
             return BadRequest();
         }

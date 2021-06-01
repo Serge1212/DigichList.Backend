@@ -18,13 +18,14 @@ namespace DigichList.Backend.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly IAdminRepositury _repo;
-        private readonly IOptions<AuthOptions> authOptions;
+        private readonly IAdminRepository _repo;
+        private readonly IOptions<AuthOptions> _authOptions;
 
-        public AdminController(IAdminRepositury repo, IOptions<AuthOptions> authOptions)
+        public AdminController(IAdminRepository repo,
+            IOptions<AuthOptions> authOptions)
         {
             _repo = repo;
-            this.authOptions = authOptions;
+            _authOptions = authOptions;
         }
         [HttpGet]
         [Route("api/[controller]")]
@@ -37,12 +38,8 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetAdmin(int id)
         {
-            var user = await _repo.GetByIdAsync(id);
-            if (user != null)
-            {
-                return Ok(user);
-            }
-            return NotFound($"admin whith id: {id} was not found");
+            return await CommonControllerMethods
+                .GetByIdAsync<Admin, IAdminRepository>(id, _repo);
         }
 
         [HttpPost]
@@ -57,13 +54,8 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> DeleteAdmin(int id)
         {
-            var admin = await _repo.GetByIdAsync(id);
-            if (admin != null)
-            {
-                await _repo.DeleteAsync(admin);
-                return Ok();
-            }
-            return NotFound($"admin whith id: {id} was not found");
+            return await CommonControllerMethods
+                .DeleteAsync<Admin, IAdminRepository>(id, _repo);
         }
 
         [HttpPost]
@@ -72,7 +64,7 @@ namespace DigichList.Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                return await UpdateControllerMethod.UpdateAsync(admin, _repo);
+                return await CommonControllerMethods.UpdateAsync(admin, _repo);
             }
             return BadRequest();
         }
@@ -101,7 +93,7 @@ namespace DigichList.Backend.Controllers
 
         private string GenerateJWT(Admin admin)
         {
-            var authParams = authOptions.Value;
+            var authParams = _authOptions.Value;
             var securityKey = authParams.GetSymmetricSecurutyKey();
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

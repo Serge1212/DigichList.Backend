@@ -10,7 +10,7 @@ namespace DigichList.Backend.Controllers
     [Route("api/[controller]")]
     public class DefectController : ControllerBase
     {
-        private IDefectRepository _repo;
+        private readonly IDefectRepository _repo;
 
         public DefectController(IDefectRepository repo)
         {
@@ -26,11 +26,8 @@ namespace DigichList.Backend.Controllers
         [HttpGet("GetDefect")]
         public async Task<IActionResult> GetDefect(int id)
         {
-            var defect = await _repo.GetByIdAsync(id);
-
-            return defect != null ?
-                Ok(defect) :
-                NotFound($"defect with id: {id} was not found");
+            return await CommonControllerMethods
+                .GetByIdAsync<Defect, IDefectRepository>(id, _repo);
 
         }
 
@@ -40,7 +37,7 @@ namespace DigichList.Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                return await UpdateControllerMethod.UpdateAsync(defect, _repo);
+                return await CommonControllerMethods.UpdateAsync(defect, _repo);
             }
             return BadRequest();
         }
@@ -48,13 +45,8 @@ namespace DigichList.Backend.Controllers
         [HttpDelete("DeleteDefect")]
         public async Task<IActionResult> DeleteDefect(int id)
         {
-            var defect = await _repo.GetByIdAsync(id);
-            if (defect != null)
-            {
-                await _repo.DeleteAsync(defect);
-                return Ok();
-            }
-            return NotFound($"defect with id {id} was not found");
+            return await CommonControllerMethods
+                .DeleteAsync<Defect, IDefectRepository>(id, _repo);
         }
 
         [HttpDelete("DeleteDefects")]

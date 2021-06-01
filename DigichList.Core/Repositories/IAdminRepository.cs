@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DigichList.Core.Repositories
 {
-    public interface IAdminRepositury: IRepository<Admin, int>
+    public interface IAdminRepository: IRepository<Admin, int>
     {
         public Task<Admin> GetAdminByEmailAndPassword(string email, string password);
     }

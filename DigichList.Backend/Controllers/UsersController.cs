@@ -28,12 +28,8 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _repo.GetByIdAsync(id);
-            if (user != null)
-            {
-                return Ok(user);
-            }
-            return NotFound($"user with id: {id} was not found");
+            return await CommonControllerMethods
+                .GetByIdAsync<User, IUserRepository>(id, _repo);
         }
 
         [HttpPost]
@@ -52,7 +48,7 @@ namespace DigichList.Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                await UpdateControllerMethod.UpdateAsync(user, _repo);
+                await CommonControllerMethods.UpdateAsync(user, _repo);
                 
             }
             return BadRequest();

@@ -1,10 +1,8 @@
 ﻿using DigichList.Backend.Helpers;
 using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
-using DigichList.Core.Repositories.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -30,12 +28,8 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetRole(int id)
         {
-            var defect = await _repo.GetByIdAsync(id);
-            if (defect != null)
-            {
-                return Ok(defect);
-            }
-            return NotFound($"role whith id: {id} was not found");
+            return await CommonControllerMethods
+                .GetByIdAsync<Role, IRoleRepository>(id, _repo);
         }
 
         [HttpPost]
@@ -50,13 +44,8 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> DeleteRole(int id)
         {
-            var role = await _repo.GetByIdAsync(id);
-            if (role != null)
-            {
-                await _repo.DeleteAsync(role);
-                return Ok();
-            }
-            return NotFound($"role with id: {id} was not found");
+            return await CommonControllerMethods
+                .DeleteAsync<Role, IRoleRepository>(id, _repo);
         }
 
         [HttpPost]
@@ -65,7 +54,7 @@ namespace DigichList.Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                return await UpdateControllerMethod.UpdateAsync(role, _repo);
+                return await CommonControllerMethods.UpdateAsync(role, _repo);
             }
             return BadRequest();
             

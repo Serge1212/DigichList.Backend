@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DigichList.Infrastructure.Repositories
 {
-    public class AdminRepository: Repository<Admin, int>, IAdminRepositury
+    public class AdminRepository: Repository<Admin, int>, IAdminRepository
     {
         public AdminRepository(DigichListContext context) : base(context) { }
 

@@ -91,14 +91,14 @@ namespace DigichList.Backend.Controllers
             return BadRequest();
         }
 
-       /* [Route("login")]
+        [Route("login")]
         [HttpPost]
-        public IActionResult Login([FromBody] Login request)
+        public async Task<IActionResult> Login([FromBody] Login request)
         {
-            var admin = AuthenticateUser(request.Email, request.Password);
+            var admin = await AuthenticateUser(request.Email, request.Password);
             if (admin != null)
             {
-                var token = GenereteJWT(admin);
+                var token = GenerateJWT(admin);
                 return Ok(new
                 {
                     acceess_token = token
@@ -106,14 +106,14 @@ namespace DigichList.Backend.Controllers
             }
             return Unauthorized();
 
-        }*/
+        }
 
         private async Task<Admin> AuthenticateUser(string email, string password)
         {
             return await _repo.GetAdminByEmailAndPassword(email, password);
         }
 
-        private string GenereteJWT(Admin admin)
+        private string GenerateJWT(Admin admin)
         {
             var authParams = authOptions.Value;
             var securityKey = authParams.GetSymmetricSecurutyKey();

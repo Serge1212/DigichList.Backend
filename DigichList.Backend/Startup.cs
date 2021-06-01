@@ -1,3 +1,4 @@
+using DigichList.Backend.Options;
 using DigichList.Core.Repositories;
 using DigichList.Infrastructure.Data;
 using DigichList.Infrastructure.Repositories;
@@ -27,7 +28,22 @@ namespace DigichList.Backend
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IDefectRepository, DefectRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IAdminRepositury, AdminRepository>();
             services.AddDbContext<DigichListContext>();
+
+            var authOptionsCifiguration = Configuration.GetSection("Auth");
+            services.Configure<AuthOptions>(authOptionsCifiguration);
+
+            services.AddCors(oprions =>
+            {
+                oprions.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

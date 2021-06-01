@@ -1,8 +1,8 @@
 ﻿using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
-using DigichList.Core.Repositories.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -60,7 +60,7 @@ namespace DigichList.Backend.Controllers
 
         [HttpPost]
         [Route("api/[controller]/UpdateUser")]
-        public async Task<IActionResult> UpdatePost([FromBody] User user)
+        public async Task<IActionResult> UpdateUser([FromBody] User user)
         {
             if (ModelState.IsValid)
             {
@@ -70,13 +70,13 @@ namespace DigichList.Backend.Controllers
 
                     return Ok();
                 }
-                catch (Exception ex)
+                catch (DbUpdateConcurrencyException)
                 {
-                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
-                    {
-                        return NotFound();
-                    }
+                    return NotFound();
 
+                }
+                catch (Exception)
+                {
                     return BadRequest();
                 }
             }

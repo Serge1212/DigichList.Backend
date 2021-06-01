@@ -4,6 +4,7 @@ using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -67,7 +68,7 @@ namespace DigichList.Backend.Controllers
 
         [HttpPost]
         [Route("api/[controller]/UpdateAdmin")]
-        public async Task<IActionResult> UpdatePost([FromBody] Admin admin)
+        public async Task<IActionResult> UpdateAdmin([FromBody] Admin admin)
         {
             if (ModelState.IsValid)
             {
@@ -77,13 +78,13 @@ namespace DigichList.Backend.Controllers
 
                     return Ok();
                 }
-                catch (Exception ex)
+                catch (DbUpdateConcurrencyException)
                 {
-                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
-                    {
-                        return NotFound();
-                    }
+                    return NotFound();
 
+                }
+                catch (Exception)
+                {
                     return BadRequest();
                 }
             }

@@ -8,7 +8,8 @@ namespace DigichList.Infrastructure.Data
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=DigichListDb;Trusted_Connection=True;");
+            //optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=DigichListDb;Trusted_Connection=True;");
+            optionsBuilder.UseNpgsql("Server=127.0.0.1; port=5432; user id=postgres; password=postgresidk; database=DigichListDb; pooling=true");
         }
 
         public DbSet<Admin> Admins { get; set; }

@@ -8,7 +8,7 @@ namespace DigichList.Infrastructure.Data
         public DigichListContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<DigichListContext>();
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=DigichListDb;Trusted_Connection=True;");
+            optionsBuilder.UseNpgsql("Server=127.0.0.1; port=5432; user id =postgres; password=postgresidk; database=DigichListDb; pooling = true");
             return new DigichListContext();
         }
     }

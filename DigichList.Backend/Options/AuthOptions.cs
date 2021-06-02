@@ -1,9 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DigichList.Backend.Options
 {
@@ -14,8 +10,6 @@ namespace DigichList.Backend.Options
         public string Secret { get; set; }
         public int TokenLifetime { get; set; }
         public SymmetricSecurityKey GetSymmetricSecurutyKey()
-        {
-            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
-        }
+            => new(Encoding.ASCII.GetBytes(Secret));
     }
 }

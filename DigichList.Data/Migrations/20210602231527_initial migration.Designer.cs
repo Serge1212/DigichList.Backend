@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DigichList.Infrastructure.Migrations
 {
     [DbContext(typeof(DigichListContext))]
-    [Migration("20210602220955_migration for postgres")]
-    partial class migrationforpostgres
+    [Migration("20210602231527_initial migration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

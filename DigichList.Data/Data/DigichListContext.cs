@@ -9,7 +9,15 @@ namespace DigichList.Infrastructure.Data
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                var userid = Environment.GetEnvironmentVariable("POSTGRES_LOCAL_USERID", EnvironmentVariableTarget.User);
+                var password = Environment.GetEnvironmentVariable("POSTGRES_LOCAL_PASSWORD", EnvironmentVariableTarget.User);
+
+                optionsBuilder.UseNpgsql($"Server=127.0.0.1; port=5432; user id={userid}; password={password};" +
+                    $"database=DigichListDb; pooling=true");
+            }
+            else
             {
                 var host     = Environment.GetEnvironmentVariable("POSTGRES_REMOTE_HOST"    , EnvironmentVariableTarget.User);
                 var username = Environment.GetEnvironmentVariable("POSTGRES_REMOTE_USERNAME", EnvironmentVariableTarget.User);
@@ -18,14 +26,6 @@ namespace DigichList.Infrastructure.Data
 
                 optionsBuilder.UseNpgsql($"host={host}; username={username}; password={password}; database={database};" +
                     $"pooling=true; SSL Mode=Require;Trust Server Certificate=true;");
-            }
-            else
-            {
-                var userid = Environment.GetEnvironmentVariable("POSTGRES_LOCAL_USERID", EnvironmentVariableTarget.User);
-                var password = Environment.GetEnvironmentVariable("POSTGRES_LOCAL_PASSWORD", EnvironmentVariableTarget.User);
-
-                optionsBuilder.UseNpgsql($"Server=127.0.0.1; port=5432; user id={userid}; password={password};" +
-                    $"database=DigichListDb; pooling=true");
             }
         }
 

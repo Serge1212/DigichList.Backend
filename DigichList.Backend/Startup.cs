@@ -21,6 +21,7 @@ namespace DigichList.Backend
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddControllers().AddNewtonsoftJson();
             services.AddLogging(configure => configure.AddConsole());
             services.AddScoped<IDefectImageRepository, DefectImageRepository>();
@@ -43,6 +44,11 @@ namespace DigichList.Backend
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {

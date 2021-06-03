@@ -2,7 +2,7 @@
 
 namespace DigichList.Backend.ViewModel
 {
-    public class Login
+    public class LoginViewModel
     {
         [Required]
         [EmailAddress]

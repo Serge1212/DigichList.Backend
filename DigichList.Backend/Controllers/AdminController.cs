@@ -71,7 +71,7 @@ namespace DigichList.Backend.Controllers
 
         [Route("login")]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] Login request)
+        public async Task<IActionResult> Login([FromBody] LoginViewModel request)
         {
             var admin = await AuthenticateUser(request.Email, request.Password);
             if (admin != null)

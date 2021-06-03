@@ -1,3 +1,4 @@
+using DigichList.Backend.Helpers;
 using DigichList.Backend.Options;
 using DigichList.Core.Repositories;
 using DigichList.Infrastructure.Data;
@@ -28,6 +29,7 @@ namespace DigichList.Backend
             services.AddScoped<IDefectRepository, DefectRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IAdminRepositury, AdminRepository>();
+            services.AddScoped<JwtService>();
             services.AddDbContext<DigichListContext>();
 
             var authOptionsCifiguration = Configuration.GetSection("Auth");

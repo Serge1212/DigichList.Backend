@@ -1,4 +1,5 @@
-﻿using DigichList.Backend.Options;
+﻿using DigichList.Backend.Helpers;
+using DigichList.Backend.Options;
 using DigichList.Backend.ViewModel;
 using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
@@ -20,11 +21,13 @@ namespace DigichList.Backend.Controllers
     {
         private readonly IAdminRepositury _repo;
         private readonly IOptions<AuthOptions> authOptions;
+        private readonly JwtService jwtService;
 
-        public AdminController(IAdminRepositury repo, IOptions<AuthOptions> authOptions)
+        public AdminController(IAdminRepositury repo, IOptions<AuthOptions> authOptions, JwtService jwtService)
         {
             _repo = repo;
             this.authOptions = authOptions;
+            this.jwtService = jwtService;
         }
         [HttpGet]
         [Route("api/[controller]")]
@@ -95,44 +98,16 @@ namespace DigichList.Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] Login request)
         {
-            var admin = await AuthenticateUser(request.Email, request.Password);
-            if (admin != null)
+            var admin = await _repo.GetAdminByEmail(request.Email);
+            if (admin == null) return BadRequest(new { message = "Invalid Credentials" });
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, admin.Password))
             {
-                var token = GenerateJWT(admin);
-                return Ok(new
-                {
-                    acceess_token = token
-                });
+                return BadRequest(new { message = "Invalid Credentials" });
             }
-            return Unauthorized();
 
-        }
+            var jwt = jwtService.Generate(admin.Id);
 
-        private async Task<Admin> AuthenticateUser(string email, string password)
-        {
-            return await _repo.GetAdminByEmailAndPassword(email, password);
-        }
-
-        private string GenerateJWT(Admin admin)
-        {
-            var authParams = authOptions.Value;
-            var securityKey = authParams.GetSymmetricSecurutyKey();
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new List<Claim>()
-            {
-                new Claim(JwtRegisteredClaimNames.Email, admin.Email),
-                new Claim(JwtRegisteredClaimNames.Sub, admin.Id.ToString()),
-                new Claim("role", admin.AccessLevel.ToString())
-            };
-
-            var token = new JwtSecurityToken(authParams.Issuer,
-                authParams.Audience,
-                claims,
-                expires: DateTime.Now.AddSeconds(authParams.TokenLifetime),
-                signingCredentials: credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Ok(new { jwt });
         }
     }
 }

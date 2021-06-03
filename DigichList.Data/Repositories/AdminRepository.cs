@@ -12,9 +12,9 @@ namespace DigichList.Infrastructure.Repositories
     {
         public AdminRepository(DigichListContext context) : base(context) { }
 
-        public async Task<Admin> GetAdminByEmailAndPassword(string email, string password)
+        public async Task<Admin> GetAdminByEmail(string email)
         {
-            return await _context.Admins.GetAdminByEmailAndPassword(email,password);
+            return await _context.Admins.GetAdminByEmail(email);
         }
     }
 }

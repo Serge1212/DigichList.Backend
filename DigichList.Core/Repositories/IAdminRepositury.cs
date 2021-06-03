@@ -9,6 +9,6 @@ namespace DigichList.Core.Repositories
 {
     public interface IAdminRepositury: IRepository<Admin, int>
     {
-        public Task<Admin> GetAdminByEmailAndPassword(string email, string password);
+        public Task<Admin> GetAdminByEmail(string email);
     }
 }

@@ -9,9 +9,9 @@ namespace DigichList.Infrastructure.Extensions
 {
     public static class AdminDbContextExtensions
     {
-        public static async Task<Admin> GetAdminByEmailAndPassword(this DbSet<Admin> admins, string email, string password)
+        public static async Task<Admin> GetAdminByEmail(this DbSet<Admin> admins, string email)
         {
-            return await admins.FirstOrDefaultAsync(x => x.Email == email && x.Password == password);
+            return await admins.FirstOrDefaultAsync(x => x.Email == email);
         }
     }
 }

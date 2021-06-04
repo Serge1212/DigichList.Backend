@@ -44,7 +44,7 @@ namespace DigichList.Backend.Controllers
 
         [HttpPost]
         [Route("api/[controller]/UpdateUser")]
-        public async Task<IActionResult> UpdatePost([FromBody] User user)
+        public async Task<IActionResult> UpdateUser([FromBody] User user)
         {
             if (ModelState.IsValid)
             {

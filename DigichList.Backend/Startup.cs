@@ -30,7 +30,7 @@ namespace DigichList.Backend
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IDefectRepository, DefectRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
-            services.AddScoped<IAdminRepositury, AdminRepository>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<JwtService>();
             services.AddDbContext<DigichListContext>();
 
@@ -64,7 +64,8 @@ namespace DigichList.Backend
             app.UseCors(x => x
             .AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            );
 
             app.UseAuthorization();
 

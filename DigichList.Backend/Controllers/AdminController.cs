@@ -5,13 +5,8 @@ using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -19,14 +14,17 @@ namespace DigichList.Backend.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly IAdminRepositury _repo;
-        private readonly IOptions<AuthOptions> authOptions;
-        private readonly JwtService jwtService;
+        private readonly IAdminRepository _repo;
+        private readonly IOptions<AuthOptions> _authOptions;
+        private readonly JwtService _jwtService;
 
-        public AdminController(IAdminRepositury repo, IOptions<AuthOptions> authOptions)
+        public AdminController(IAdminRepository repo,
+            IOptions<AuthOptions> authOptions,
+            JwtService jwtService)
         {
             _repo = repo;
             _authOptions = authOptions;
+            _jwtService = jwtService;
         }
         [HttpGet]
         [Route("api/[controller]")]
@@ -89,15 +87,59 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> Login([FromBody] LoginViewModel request)
         {
             var admin = await _repo.GetAdminByEmail(request.Email);
-            if (admin == null) return BadRequest(new { message = "Invalid Credentials" });
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, admin.Password))
+
+            if (admin == null)
+                return BadRequest(new { message = "Invalid Credentials" });
+
+            var passwordsMatch = BCrypt.Net.BCrypt.Verify(request.Password, admin.Password);
+            if (!passwordsMatch)
             {
                 return BadRequest(new { message = "Invalid Credentials" });
             }
 
-            var jwt = jwtService.Generate(admin.Id);
+            var jwt = _jwtService.Generate(admin.Id);
 
-            return Ok(new { jwt });
+            Response.Cookies.Append("jwt", jwt, new CookieOptions 
+            {
+                HttpOnly = true
+            });
+
+            return Ok(new 
+            { 
+                message = "Success"
+            });
+        }
+
+        [HttpGet("admin")]
+        public async Task<IActionResult> Admin()
+        {
+            try
+            {
+                var jwt = Request.Cookies["jwt"];
+
+                var token = _jwtService.Verify(jwt);
+
+                int adminId = int.Parse(token.Issuer);
+
+                var admin = await _repo.GetByIdAsync(adminId);
+
+                return Ok(admin);
+            }
+            catch(Exception)
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpPost("Logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt");
+
+            return Ok(new
+            {
+                message = "success"
+            });
         }
     }
 }

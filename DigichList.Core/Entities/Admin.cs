@@ -1,7 +1,7 @@
 ﻿using DigichList.Core.Entities.Base;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using Newtonsoft.Json;
 
 namespace DigichList.Core.Entities
 {
@@ -9,7 +9,7 @@ namespace DigichList.Core.Entities
     {
         public string Username { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
+        [JsonIgnore] public string Password { get; set; }
         public AccessLevels AccessLevel { get; set; }
 
         public enum AccessLevels

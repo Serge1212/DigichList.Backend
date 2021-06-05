@@ -37,16 +37,17 @@ namespace DigichList.Backend
             var authOptionsCifiguration = Configuration.GetSection("Auth");
             services.Configure<AuthOptions>(authOptionsCifiguration);
 
-            services.AddCors(oprions =>
-            {
-                oprions.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-                    });
-            });
+            //services.AddCors(oprions =>
+            //{
+            //    oprions.AddDefaultPolicy(
+            //        builder =>
+            //        {
+            //            builder.AllowAnyOrigin()
+            //            .AllowAnyMethod()
+            //            .AllowAnyHeader();
+            //        });
+            //});
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -62,9 +63,9 @@ namespace DigichList.Backend
             app.UseRouting();
 
             app.UseCors(x => x
-            .SetIsOriginAllowed(_ => true)
-            .AllowAnyMethod()
+            .WithOrigins("https://localhost:3000", "https://localhost:44379", "http://127.0.0.1:5500", "https://digichlistbackend.herokuapp.com")
             .AllowAnyHeader()
+            .AllowAnyMethod()
             .AllowCredentials()
             );
 

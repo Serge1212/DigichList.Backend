@@ -102,7 +102,11 @@ namespace DigichList.Backend.Controllers
 
             Response.Cookies.Append("jwt", jwt, new CookieOptions 
             {
-                HttpOnly = true
+                HttpOnly = true,
+                Expires = DateTimeOffset.UtcNow.AddDays(1).AddMinutes(-5),
+                SameSite = SameSiteMode.None,
+                Secure = true
+                
             });
 
             return Ok(new 

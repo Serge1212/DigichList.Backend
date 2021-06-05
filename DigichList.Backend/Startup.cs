@@ -63,7 +63,13 @@ namespace DigichList.Backend
             app.UseRouting();
 
             app.UseCors(x => x
-            .WithOrigins("https://localhost:3000", "http://localhost:3000", "https://localhost:44379", "http://127.0.0.1:5500", "https://digichlistbackend.herokuapp.com")
+            .WithOrigins(
+                "https://localhost:3000",
+                "http://localhost:3000",
+                "https://localhost:44379",
+                "http://127.0.0.1:5500",
+                "https://digichlistbackend.herokuapp.com",
+                "https://digich-list-frontend.herokuapp.com")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()

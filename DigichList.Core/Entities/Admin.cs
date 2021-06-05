@@ -9,7 +9,7 @@ namespace DigichList.Core.Entities
     {
         public string Username { get; set; }
         public string Email { get; set; }
-        [JsonIgnore] public string Password { get; set; }
+        public string Password { get; set; }
         public AccessLevels AccessLevel { get; set; }
 
         public enum AccessLevels

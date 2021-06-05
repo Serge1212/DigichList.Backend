@@ -45,6 +45,7 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]")]
         public async Task<IActionResult> CreateAdmin(Admin admin)
         {
+            admin.Password = BCrypt.Net.BCrypt.HashPassword(admin.Password);
             await _repo.AddAsync(admin);
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + admin.Id, admin);
         }

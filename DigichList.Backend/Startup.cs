@@ -62,9 +62,10 @@ namespace DigichList.Backend
             app.UseRouting();
 
             app.UseCors(x => x
-            .AllowAnyOrigin()
+            .SetIsOriginAllowed(_ => true)
             .AllowAnyMethod()
             .AllowAnyHeader()
+            .AllowCredentials()
             );
 
             app.UseAuthorization();

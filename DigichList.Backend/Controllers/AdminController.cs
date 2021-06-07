@@ -38,7 +38,7 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> GetAdmin(int id)
         {
             return await CommonControllerMethods
-                .GetByIdAsync<Admin, IAdminRepository>(id, _repo);
+                .GetEntityByIdAsync<Admin, IAdminRepository>(id, _repo);
         }
 
         [HttpPost]
@@ -100,13 +100,12 @@ namespace DigichList.Backend.Controllers
 
             var jwt = _jwtService.Generate(admin.Id);
 
-            Response.Cookies.Append("jwt", jwt, new CookieOptions 
+            Response.Cookies.Append("jwt", jwt, new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTimeOffset.UtcNow.AddDays(1).AddMinutes(-5),
                 SameSite = SameSiteMode.None,
-                Secure = true
-                
+                Secure = true,
+ //               IsEssential = true,
             });
 
             return Ok(new 
@@ -130,16 +129,25 @@ namespace DigichList.Backend.Controllers
 
                 return Ok(admin);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                return Unauthorized();
+                return Unauthorized(ex.Message);
             }
         }
 
         [HttpPost("Logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("jwt");
+            CookieOptions options = new()
+            {
+                Expires = DateTime.Today.AddDays(1),
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                HttpOnly = true
+            };
+
+            Response.Cookies.Delete("jwt", options);
+            
 
             return Ok(new
             {

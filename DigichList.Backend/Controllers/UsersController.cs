@@ -3,6 +3,8 @@ using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -19,17 +21,48 @@ namespace DigichList.Backend.Controllers
 
         [HttpGet]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetUsers()
+        public IActionResult GetUsers()
         {
-            return Ok(await _repo.GetAllAsync());
+            var users = _repo.GetUsersWithRoles();
+            
+            return Ok(users.Select(x => new 
+            { 
+                x.Id,
+                x.FirstName,
+                x.LastName,
+                x.Username,
+                rolename = x?.Role?.Name,
+                x.IsRegistered
+            }));
         }
 
         [HttpGet]
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
+            Func<int, Task<dynamic>> predicate = _repo.ReturnUserWithRoleByIdRequest;
+
             return await CommonControllerMethods
-                .GetByIdAsync<User, IUserRepository>(id, _repo);
+                .GetDynamicDatayByIdAsync<User, dynamic>(id, predicate);
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/GetTechnicians")]
+        public IActionResult GetTechnicians()
+        {
+            var technicians = _repo.GetTechnicians();
+            if(technicians != null)
+            {
+                return Ok(technicians.Select(x => new
+                {
+                    x.Id,
+                    x.FirstName,
+                    x.LastName
+                }));
+            }
+
+            return NotFound("No technicians available");
+
         }
 
         [HttpPost]
@@ -48,8 +81,7 @@ namespace DigichList.Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                await CommonControllerMethods.UpdateAsync(user, _repo);
-                
+                await CommonControllerMethods.UpdateAsync(user, _repo);    
             }
             return BadRequest();
         }

@@ -27,7 +27,7 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> GetDefect(int id)
         {
             return await CommonControllerMethods
-                .GetByIdAsync<Defect, IDefectRepository>(id, _repo);
+                .GetEntityByIdAsync<Defect, IDefectRepository>(id, _repo);
 
         }
 

@@ -3,6 +3,7 @@ using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -21,7 +22,8 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]")]
         public async Task<IActionResult> GetRoless()
         {
-            return Ok(await _repo.GetAllAsync());
+            var roles = await _repo.GetAllAsync();
+            return Ok(roles.Select(x => new { x.Id, x.Name}));
         }
 
         [HttpGet]
@@ -29,7 +31,7 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> GetRole(int id)
         {
             return await CommonControllerMethods
-                .GetByIdAsync<Role, IRoleRepository>(id, _repo);
+                .GetEntityByIdAsync<Role, IRoleRepository>(id, _repo);
         }
 
         [HttpPost]

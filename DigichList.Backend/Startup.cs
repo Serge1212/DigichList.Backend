@@ -76,6 +76,7 @@ namespace DigichList.Backend
             );
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
 
             app.UseEndpoints(endpoints =>

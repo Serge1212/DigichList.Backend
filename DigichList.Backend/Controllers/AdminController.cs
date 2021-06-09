@@ -45,7 +45,7 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]")]
         public async Task<IActionResult> CreateAdmin(Admin admin)
         {
-            admin.Password = BCrypt.Net.BCrypt.HashPassword(admin.Password);
+            admin.Password = BCrypt.Net.BCrypt.HashPassword(admin.Password); //тут хешує пароль і зберігає хеш 
             await _repo.AddAsync(admin);
             return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + admin.Id, admin);
         }
@@ -92,7 +92,7 @@ namespace DigichList.Backend.Controllers
             if (admin == null)
                 return BadRequest(new { message = "Invalid Credentials" });
 
-            var passwordsMatch = BCrypt.Net.BCrypt.Verify(request.Password, admin.Password);
+            var passwordsMatch = BCrypt.Net.BCrypt.Verify(request.Password, admin.Password); //тут порівнюється пароль і його хеш
             if (!passwordsMatch)
             {
                 return BadRequest(new { message = "Invalid Credentials" });

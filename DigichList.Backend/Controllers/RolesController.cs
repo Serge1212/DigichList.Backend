@@ -1,8 +1,8 @@
 ﻿using DigichList.Backend.Helpers;
 using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +20,7 @@ namespace DigichList.Backend.Controllers
 
         [HttpGet]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetRoless()
+        public async Task<IActionResult> GetRoles()
         {
             var roles = await _repo.GetAllAsync();
             return Ok(roles.Select(x => new { x.Id, x.Name}));
@@ -30,8 +30,9 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetRole(int id)
         {
+            Func<int, Task<dynamic>> predicate = _repo.ReturnRoleByIdRequest;
             return await CommonControllerMethods
-                .GetEntityByIdAsync<Role, IRoleRepository>(id, _repo);
+                .GetDynamicDatayByIdAsync<Role, dynamic>(id, predicate);
         }
 
         [HttpPost]
@@ -39,7 +40,7 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> CreateRole(Role role)
         {
             await _repo.AddAsync(role);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + role.Id, role);
+            return Ok("The role has been created");
         }
 
         [HttpDelete]

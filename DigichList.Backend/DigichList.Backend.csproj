@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
@@ -19,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DigichList.Core\DigichList.Core.csproj" />
     <ProjectReference Include="..\DigichList.Data\DigichList.Infrastructure.csproj" />
+    <ProjectReference Include="..\DigichList.TelegramNotifications\DigichList.TelegramNotifications.csproj" />
   </ItemGroup>
 
 

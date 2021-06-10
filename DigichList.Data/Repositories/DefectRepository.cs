@@ -14,6 +14,7 @@ namespace DigichList.Infrastructure.Repositories
     {
         public DefectRepository(DigichListContext context) : base(context) { }
 
+
         public async Task DeleteRangeAsync(int[] idArr)
         {
             var defectsToDelete = GetRangeByIds(idArr);
@@ -34,6 +35,36 @@ namespace DigichList.Infrastructure.Repositories
         public IEnumerable<Defect> GetRangeByIds(int[] idArr)
         {
             return _context.Defects.Where(d => idArr.Contains(d.Id));
+        }
+        public async Task<AssignedDefect> GetAssignedDefectAsync(int userId, int defectId)
+        {
+            var user = await _context.Users.GetUserByIdWithRole(userId);
+            var defect = await GetByIdAsync(defectId);
+            if(user != null || defect != null)
+            {
+                var assignedDefect = new AssignedDefect
+                {
+                    AssignedWorker = user,
+                    Defect = defect
+                };
+
+                return assignedDefect;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task SaveAssignedDefect(AssignedDefect assignedDefect)
+        {
+            await _context.AssignedDefects.AddAsync(assignedDefect);
+            await SaveChangesAsync();
+        }
+
+        public IEnumerable<Defect> GetDefectsWithUsersAndAssignedDefects()
+        {
+            return _context.Defects.GetDefectsWithUsersAndAssignedDefects();
         }
     }
 }

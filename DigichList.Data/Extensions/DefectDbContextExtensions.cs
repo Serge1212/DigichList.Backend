@@ -1,5 +1,7 @@
 ﻿using DigichList.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DigichList.Infrastructure.Extensions
@@ -11,6 +13,14 @@ namespace DigichList.Infrastructure.Extensions
             return await defects
                 .Include(a => a.AssignedDefect)
                 .FirstOrDefaultAsync(x => x.Id == defectId);
+        }
+
+        public static IEnumerable<Defect> GetDefectsWithUsersAndAssignedDefects(this DbSet<Defect> defects)
+        {
+            return defects
+                .Include(p => p.Publisher)
+                .Include(a => a.AssignedDefect)
+                .ThenInclude(u => u.AssignedWorker);
         }
     }
 }

@@ -1,7 +1,11 @@
-﻿using DigichList.Backend.Helpers;
+﻿using AutoMapper;
+using DigichList.Backend.Helpers;
+using DigichList.Backend.ViewModel;
 using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
+using DigichList.TelegramNotifications.BotNotifications;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -11,16 +15,23 @@ namespace DigichList.Backend.Controllers
     public class DefectController : ControllerBase
     {
         private readonly IDefectRepository _repo;
+        private readonly IBotNotificationSender _botNotificationSender;
+        private readonly IMapper _mapper;
 
-        public DefectController(IDefectRepository repo)
+        public DefectController(IDefectRepository repo,
+            IBotNotificationSender sender,
+            IMapper mapper)
         {
             _repo = repo;
+            _botNotificationSender = sender;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDefects()
+        public IActionResult GetDefects()
         {
-            return Ok(await _repo.GetAllAsync());
+            var defects = _repo.GetDefectsWithUsersAndAssignedDefects();
+            return Ok(_mapper.Map<IEnumerable<DefectViewModel>>(defects)); 
         }
 
         [HttpGet("GetDefect")]
@@ -52,19 +63,28 @@ namespace DigichList.Backend.Controllers
         [HttpDelete("DeleteDefects")]
         public async Task<IActionResult> DeleteDefects([FromQuery(Name = "idArr")] int[] idArr)
         {
+            if(idArr.Length < 1)
+            {
+                return NotFound("There wasn't any id provided to delete");
+            }
             await _repo.DeleteRangeAsync(idArr);
             return Ok();
         }
 
-        //[HttpPost]
-        //[Route("api/[controller]/UpdateDefect")]
-        //public async Task<IActionResult> UpdatePost([FromBody] Defect defect)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        await UpdateControllerMethod.UpdateAsync(defect, _repo);
-        //    }
-        //    return BadRequest();
-        //}
+        [HttpPost]
+        public async Task<IActionResult> AssignDefect(int userId, int defectId)
+        {
+            var assignedDefect = await _repo.GetAssignedDefectAsync(userId, defectId);
+            if(assignedDefect != null)
+            {
+                await _repo.SaveAssignedDefect(assignedDefect);
+                await _botNotificationSender.NotifyUserWasGivenWithDefect(assignedDefect.AssignedWorker.TelegramId, assignedDefect.Defect);
+                return Ok($"The defect was assigned successfully to {assignedDefect.AssignedWorker.FirstName} {assignedDefect.AssignedWorker?.LastName}");
+            }
+            else
+            {
+                return NotFound("User or defect was not found");
+            }
+        }
     }
 }

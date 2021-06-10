@@ -3,7 +3,7 @@ using DigichList.Backend.Options;
 using DigichList.Core.Repositories;
 using DigichList.Infrastructure.Data;
 using DigichList.Infrastructure.Repositories;
-using DigichList.Infrastructure.Seeders;
+using DigichList.TelegramNotifications.BotNotifications;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,22 +31,14 @@ namespace DigichList.Backend
             services.AddScoped<IDefectRepository, DefectRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IBotNotificationSender, BotNotificationSender>();
             services.AddScoped<JwtService>();
             services.AddDbContext<DigichListContext>();
 
             var authOptionsCifiguration = Configuration.GetSection("Auth");
             services.Configure<AuthOptions>(authOptionsCifiguration);
 
-            //services.AddCors(oprions =>
-            //{
-            //    oprions.AddDefaultPolicy(
-            //        builder =>
-            //        {
-            //            builder.AllowAnyOrigin()
-            //            .AllowAnyMethod()
-            //            .AllowAnyHeader();
-            //        });
-            //});
+            services.AddAutoMapper(typeof(Startup));
             
         }
 

@@ -11,5 +11,8 @@ namespace DigichList.Core.Repositories
         public Task<Defect> GetDefectWithAssignedDefectByIdAsync(int defectId);
         public Task DeleteRangeAsync(int[] idArr);
         public IEnumerable<Defect> GetRangeByIds(int[] idArr);
+        public Task<AssignedDefect> GetAssignedDefectAsync(int userId, int defectId);
+        public Task SaveAssignedDefect(AssignedDefect assignedDefect);
+        public IEnumerable<Defect> GetDefectsWithUsersAndAssignedDefects();
     }
 }

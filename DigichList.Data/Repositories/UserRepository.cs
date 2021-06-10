@@ -40,7 +40,9 @@ namespace DigichList.Infrastructure.Repositories
         public async Task<dynamic> ReturnUserWithRoleByIdRequest(int id)
         {
             var user = await GetUserWithRoleAsync(id);
-            return new { user.FirstName, user.LastName, user?.Role.Name, user.IsRegistered };
+            return user != null ?
+                new { user.FirstName, user.LastName, role = user?.Role.Name, user.IsRegistered } :
+                null;
         }
     }
 }

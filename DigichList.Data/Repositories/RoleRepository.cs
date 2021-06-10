@@ -16,5 +16,13 @@ namespace DigichList.Infrastructure.Repositories
         {
             return await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
         }
+
+        public async Task<dynamic> ReturnRoleByIdRequest(int id)
+        {
+            var role = await GetByIdAsync(id);
+            return role != null ?
+                new { role.Id, role.Name, role.CanFixDefects, role.CanPublishDefects } :
+                null;
+        }
     }
 }

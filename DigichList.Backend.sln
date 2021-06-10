@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigichList.Core", "DigichLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigichList.Infrastructure", "DigichList.Data\DigichList.Infrastructure.csproj", "{9320FE01-84DD-406D-9066-D9A008FC54B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigichList.TelegramNotifications", "DigichList.TelegramNotifications\DigichList.TelegramNotifications.csproj", "{00DD2647-F1DE-4F3C-96FE-C50BD4F17637}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigichList.TelegramNotifications", "DigichList.TelegramNotifications\DigichList.TelegramNotifications.csproj", "{00DD2647-F1DE-4F3C-96FE-C50BD4F17637}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

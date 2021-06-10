@@ -15,6 +15,11 @@ namespace DigichList.Core.Repositories
 
         public IEnumerable<User> GetTechnicians();
 
+        public IEnumerable<User> GetUsersWithRolesAndAssignedDefects();
+
         public Task<User> GetUserWithRoleAsync(int id);
+
+        public Task<User> GetUserWithRolesAndAssignedDefectsByIdAsync(int id);
+
     }
 }

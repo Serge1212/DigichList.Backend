@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace DigichList.Infrastructure.Extensions
@@ -37,6 +38,21 @@ namespace DigichList.Infrastructure.Extensions
         {
             return users
                 .Include(r => r.Role);
+        }
+
+        public static IEnumerable<User> GetUsersWithRolesAndAssignedDefects(this DbSet<User> users)
+        {
+            return users
+                .Include(r => r.Role)
+                .Include(a => a.AssignedDefects);
+        }
+
+        public static async Task<User> GetUserWithRolesAndAssignedDefectsByIdAsync(this DbSet<User> users, int id)
+        {
+            return await users
+                .Include(r => r.Role)
+                .Include(a => a.AssignedDefects)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
 

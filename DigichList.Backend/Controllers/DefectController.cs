@@ -85,7 +85,7 @@ namespace DigichList.Backend.Controllers
             }
             else
             {
-                return NotFound("User or defect was not found");
+                return NotFound("User or defect was not found, or user has no permission to fix defects");
             }
         }
     }

@@ -36,5 +36,15 @@ namespace DigichList.Infrastructure.Repositories
         {
             return await _context.Users.GetUserByIdWithRole(id);
         }
+
+        public IEnumerable<User> GetUsersWithRolesAndAssignedDefects()
+        {
+            return _context.Users.GetUsersWithRolesAndAssignedDefects();
+        }
+
+        public async Task<User> GetUserWithRolesAndAssignedDefectsByIdAsync(int id)
+        {
+            return await _context.Users.GetUserWithRolesAndAssignedDefectsByIdAsync(id);
+        }
     }
 }

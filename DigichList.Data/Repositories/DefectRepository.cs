@@ -40,6 +40,12 @@ namespace DigichList.Infrastructure.Repositories
         {
             var user = await _context.Users.GetUserByIdWithRole(userId);
             var defect = await GetByIdAsync(defectId);
+
+            if(user?.Role?.Name != "Technician")
+            {
+                return null;
+            }
+
             if(user != null || defect != null)
             {
                 var assignedDefect = new AssignedDefect

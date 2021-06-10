@@ -9,6 +9,7 @@ namespace DigichList.TelegramNotifications.BotNotifications
         public Task NotifyUserWasGivenWithDefect(int telegramId, Defect defect);
         public Task NotifyUserHisDefectGotApproved(int telegramId, string defectDescription);
         public Task NotifyUserGotRole(int telegramId, string roleName);
+        public Task NotifyUserLostRole(int telegramId, string roleName);
 
     }
 }

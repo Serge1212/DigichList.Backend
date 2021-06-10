@@ -16,7 +16,5 @@ namespace DigichList.Core.Repositories
         public IEnumerable<User> GetTechnicians();
 
         public Task<User> GetUserWithRoleAsync(int id);
-
-        public Task<dynamic> ReturnUserWithRoleByIdRequest(int id);
     }
 }

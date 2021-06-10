@@ -1,9 +1,10 @@
-﻿using DigichList.Backend.Helpers;
+﻿using AutoMapper;
+using DigichList.Backend.Helpers;
+using DigichList.Backend.ViewModel;
 using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -12,10 +13,13 @@ namespace DigichList.Backend.Controllers
     public class RolesController : ControllerBase
     {
         private readonly IRoleRepository _repo;
+        private readonly IMapper _mapper;
 
-        public RolesController(IRoleRepository repo)
+        public RolesController(IRoleRepository repo,
+            IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -23,16 +27,17 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> GetRoles()
         {
             var roles = await _repo.GetAllAsync();
-            return Ok(roles.Select(x => new { x.Id, x.Name}));
+            return Ok(_mapper.Map<IEnumerable<RoleViewModel>>(roles));
         }
 
         [HttpGet]
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetRole(int id)
         {
-            Func<int, Task<dynamic>> predicate = _repo.ReturnRoleByIdRequest;
-            return await CommonControllerMethods
-                .GetDynamicDatayByIdAsync<Role, dynamic>(id, predicate);
+            var role = await _repo.GetByIdAsync(id);
+            return role != null ?
+                Ok(_mapper.Map<ExtendedRoleViewModel>(role)) :
+                NotFound($"Role with id of {id} was not found");
         }
 
         [HttpPost]

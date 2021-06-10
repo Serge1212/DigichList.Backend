@@ -36,13 +36,5 @@ namespace DigichList.Infrastructure.Repositories
         {
             return await _context.Users.GetUserByIdWithRole(id);
         }
-
-        public async Task<dynamic> ReturnUserWithRoleByIdRequest(int id)
-        {
-            var user = await GetUserWithRoleAsync(id);
-            return user != null ?
-                new { user.FirstName, user.LastName, role = user?.Role.Name, user.IsRegistered } :
-                null;
-        }
     }
 }

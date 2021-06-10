@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DigichList.Core.Entities.Base;
+﻿using DigichList.Core.Entities.Base;
 using DigichList.Core.Repositories.Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,26 +32,6 @@ namespace DigichList.Backend.Helpers
             where TRepo : IRepository<TEntity, int>
         {
 
-            TEntity entity = await repo.GetByIdAsync(id);
-
-            return entity != null ?
-                new OkObjectResult(entity) :
-                new NotFoundObjectResult($"{typeof(TEntity)} with id {id} was not found");
-        }
-
-        public static async Task<IActionResult> GetDynamicDatayByIdAsync<TEntity, TDataType>(int id, Func<int, Task<TDataType>> predicate)
-            where TEntity : Entity
-        {
-            object entity = await predicate(id);
-
-            return entity != null ?
-                new OkObjectResult(entity) :
-                new NotFoundObjectResult($"{typeof(TEntity)} with id {id} was not found");
-        }
-
-        public static async Task<IActionResult> GetMappedDataByIdAsync<TEntity, TRepo, TViewModel>(int id, TRepo repo, TViewModel viewModel)
-            where TRepo : IRepository<TEntity, int>
-        {
             TEntity entity = await repo.GetByIdAsync(id);
 
             return entity != null ?

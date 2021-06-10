@@ -37,13 +37,15 @@ namespace DigichList.Backend.Controllers
         [HttpGet("GetDefect")]
         public async Task<IActionResult> GetDefect(int id)
         {
-            return await CommonControllerMethods
-                .GetEntityByIdAsync<Defect, IDefectRepository>(id, _repo);
+            var defect = await _repo.GetByIdAsync(id);
+            return defect != null ?
+                Ok(_mapper.Map<DefectViewModel>(defect)) :
+                NotFound($"Defect with id of {id} was not found");
 
         }
 
         [HttpPost]
-        [Route("api/[controller]/UpdateDefect")]
+        [Route("UpdateDefect")]
         public async Task<IActionResult> UpdateDefect([FromBody] Defect defect)
         {
             if (ModelState.IsValid)

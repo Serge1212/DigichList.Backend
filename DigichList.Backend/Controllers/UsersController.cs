@@ -32,6 +32,22 @@ namespace DigichList.Backend.Controllers
         }
 
         [HttpGet]
+        [Route("api/[controller]/GetRegisteredUsers")]
+        public async Task<IActionResult> GetRegisteredUsers()
+        {
+            var users = await _repo.GetAsync(x => x.IsRegistered);
+            return Ok(_mapper.Map<IEnumerable<UserViewModel>>(users));
+        }
+
+        [HttpGet]
+        [Route("api/[controller]/GetUnregisteredUsers")]
+        public async Task<IActionResult> GetUnregisteredUsers()
+        {
+            var users = await _repo.GetAsync(x => !x.IsRegistered);
+            return Ok(_mapper.Map<IEnumerable<UserViewModel>>(users));
+        }
+
+        [HttpGet]
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetUser(int id)
         {

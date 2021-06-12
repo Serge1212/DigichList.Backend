@@ -8,5 +8,6 @@
         public string Username { get; set; }
         public bool IsRegistered { get; set; }
         public string RoleName { get; set; }
+        public int RoleId { get; set; }
     }
 }

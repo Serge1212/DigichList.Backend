@@ -9,7 +9,8 @@ namespace DigichList.Backend.Mappers
         public UserMapperProfile()
         {
             CreateMap<User, UserViewModel>()
-                .ForMember(x => x.RoleName, y => y.MapFrom(src => src.Role.Name));
+                .ForMember(x => x.RoleName, y => y.MapFrom(src => src.Role.Name))
+                .ForMember(x => x.RoleId, y => y.MapFrom(src => src.Role.Id));
 
             CreateMap<User, TechnicianViewModel>();
                

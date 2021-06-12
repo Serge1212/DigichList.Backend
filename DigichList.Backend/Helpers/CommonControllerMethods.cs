@@ -9,7 +9,7 @@ namespace DigichList.Backend.Helpers
 {
     public static class CommonControllerMethods
     {
-        public static async Task<IActionResult> UpdateAsync<R, T>(T entity, R repo) 
+        public static async Task<IActionResult> UpdateAsync<R, T>(T entity, R repo)
             where R : IRepository<T, int>
         {
             try

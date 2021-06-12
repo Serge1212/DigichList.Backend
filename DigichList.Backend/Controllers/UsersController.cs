@@ -3,6 +3,7 @@ using DigichList.Backend.Helpers;
 using DigichList.Backend.ViewModel;
 using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
+using DigichList.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -73,7 +74,7 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> CreateUser(User user)
         {
             await _repo.AddAsync(user);
-            return Created(HttpContext.Request.Scheme + 
+            return Created(HttpContext.Request.Scheme +
                 "://" + HttpContext.Request.Host +
                 HttpContext.Request.Path + "/" + user.Id, user);
         }
@@ -84,9 +85,16 @@ namespace DigichList.Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                await CommonControllerMethods.UpdateAsync(user, _repo);    
+                await CommonControllerMethods.UpdateAsync(user, _repo);
             }
             return BadRequest();
+        }
+
+        [HttpDelete]
+        [Route("api/[controller]/DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+           return await CommonControllerMethods.DeleteAsync<User, IUserRepository>(id, _repo);
         }
     }
 }

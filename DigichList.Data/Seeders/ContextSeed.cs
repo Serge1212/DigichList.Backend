@@ -39,7 +39,8 @@ namespace DigichList.Infrastructure.Seeders
                     new Role
                     {
                         Name = "Technician",
-                        CanPublishDefects = true
+                        CanPublishDefects = true,
+                        CanFixDefects = true
                     },
                 };
 
@@ -141,6 +142,37 @@ namespace DigichList.Infrastructure.Seeders
             }
         }
 
+        public async Task SeedAdmins()
+        {
+            var admins = new List<Admin>
+            {
+                new Admin
+                {
+                    Username = "Serge",
+                    Email = "serge@gmail.com",
+                    AccessLevel = Admin.AccessLevels.Admin,
+                    Password = BCrypt.Net.BCrypt.HashPassword("123123123")
+                },
+                new Admin
+                {
+                    Username = "Vasyl",
+                    Email = "vasyl@gmail.com",
+                    AccessLevel = Admin.AccessLevels.SuperAdmin,
+                    Password = BCrypt.Net.BCrypt.HashPassword("234234234")
+                },
+                new Admin
+                {
+                    Username = "Ivan",
+                    Email = "ivan@gmail.com",
+                    AccessLevel = Admin.AccessLevels.Admin,
+                    Password = BCrypt.Net.BCrypt.HashPassword("345345345")
+                }
+            };
+
+            await _context.Admins.AddRangeAsync(admins);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task SeedDefectImages()
         {
             if (!_context.DefectImages.Any())
@@ -183,6 +215,7 @@ namespace DigichList.Infrastructure.Seeders
         public async Task SeedDatabase()
         {
             await SeedRoles();
+            await SeedAdmins();
             await SeedUsers();
             await SeedDefects();
             await SeedDefectImages();

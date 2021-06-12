@@ -12,6 +12,11 @@ namespace DigichList.Infrastructure.Configurations
         {
             builder.HasIndex(r => r.Name)
                 .IsUnique();
+
+            builder
+                .HasMany(u => u.Users)
+                .WithOne(r => r.Role)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

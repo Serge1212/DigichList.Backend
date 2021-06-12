@@ -13,7 +13,7 @@ namespace DigichList.Infrastructure.Configurations
             builder
                 .HasMany(d => d.Defects)
                 .WithOne(u => u.Publisher)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder
                 .HasMany(a => a.AssignedDefects)

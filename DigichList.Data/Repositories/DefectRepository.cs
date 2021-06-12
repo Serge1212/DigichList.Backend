@@ -4,6 +4,7 @@ using DigichList.Infrastructure.Data;
 using DigichList.Infrastructure.Extensions;
 using DigichList.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,9 +42,14 @@ namespace DigichList.Infrastructure.Repositories
             var user = await _context.Users.GetUserByIdWithRole(userId);
             var defect = await GetByIdAsync(defectId);
 
+            if(_context.AssignedDefects.FirstOrDefault(x => x.DefectId == defect.Id) != null)
+            {
+                throw new ArgumentException("Defect is already assigned");
+            }
+
             if(user?.Role?.Name != "Technician")
             {
-                return null;
+                throw new ArgumentException("The user cannot fix defects");
             }
 
             if(user != null || defect != null)
@@ -58,7 +64,7 @@ namespace DigichList.Infrastructure.Repositories
             }
             else
             {
-                return null;
+                throw new ArgumentException("User or defect was not found");
             }
         }
 

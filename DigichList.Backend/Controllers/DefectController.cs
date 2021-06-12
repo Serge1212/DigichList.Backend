@@ -5,6 +5,7 @@ using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using DigichList.TelegramNotifications.BotNotifications;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -76,16 +77,24 @@ namespace DigichList.Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> AssignDefect(int userId, int defectId)
         {
-            var assignedDefect = await _repo.GetAssignedDefectAsync(userId, defectId);
-            if(assignedDefect != null)
+            try
             {
-                await _repo.SaveAssignedDefect(assignedDefect);
-                await _botNotificationSender.NotifyUserWasGivenWithDefect(assignedDefect.AssignedWorker.TelegramId, assignedDefect.Defect);
-                return Ok($"The defect was assigned successfully to {assignedDefect.AssignedWorker.FirstName} {assignedDefect.AssignedWorker?.LastName}");
+                var assignedDefect = await _repo.GetAssignedDefectAsync(userId, defectId);
+                if (assignedDefect != null)
+                {
+                    await _repo.SaveAssignedDefect(assignedDefect);
+                    await _botNotificationSender.NotifyUserWasGivenWithDefect(assignedDefect.AssignedWorker.TelegramId, assignedDefect.Defect);
+                    return Ok($"The defect was assigned successfully to {assignedDefect.AssignedWorker.FirstName} {assignedDefect.AssignedWorker?.LastName}");
+                }
+                else
+                {
+                    return NotFound("User or defect was not found, or user has no permission to fix defects");
+                }
+
             }
-            else
+            catch (ArgumentException ex)
             {
-                return NotFound("User or defect was not found, or user has no permission to fix defects");
+                return BadRequest(ex.Message);
             }
         }
     }

@@ -84,10 +84,6 @@ namespace DigichList.Backend.Controllers
             {
                 return NotFound("Cannot assign a role to nonexistent user");
             }
-            else if(user.Role != null)
-            {
-                return BadRequest("User already has a role");
-            }
 
             return (await _repo.AssignRole(user, roleId)) ?
                 Ok() :

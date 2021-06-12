@@ -4,6 +4,7 @@ using DigichList.Infrastructure.Data;
 using DigichList.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace DigichList.Infrastructure.Repositories
@@ -28,6 +29,12 @@ namespace DigichList.Infrastructure.Repositories
             if(role == null)
                 return false;
             
+            if(user.Role.Name == "Technician")
+            {
+                _context
+                    .AssignedDefects
+                    .RemoveRange(_context.AssignedDefects.Where(x => x.AssignedWorker.Id == user.Id));
+            }
 
             user.Role = role;
             _context.Users.Update(user);

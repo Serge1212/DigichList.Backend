@@ -37,7 +37,7 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> CreateRole(Role role)
         {
             await _repo.AddAsync(role);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + role.Id, role);
+            return CreatedAtAction("GetRole", new { id = role.Id }, role);
         }
 
         [HttpDelete]

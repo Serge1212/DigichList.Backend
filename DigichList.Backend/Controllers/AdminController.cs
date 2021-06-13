@@ -47,7 +47,7 @@ namespace DigichList.Backend.Controllers
         {
             admin.Password = BCrypt.Net.BCrypt.HashPassword(admin.Password); //тут хешує пароль і зберігає хеш 
             await _repo.AddAsync(admin);
-            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + admin.Id, admin);
+            return CreatedAtAction("GetAdmin", new { id = admin.Id }, admin);
         }
 
         [HttpDelete]

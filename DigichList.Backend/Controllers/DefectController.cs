@@ -55,16 +55,5 @@ namespace DigichList.Backend.Controllers
             await _repo.DeleteRangeAsync(idArr);
             return Ok();
         }
-
-        //[HttpPost]
-        //[Route("api/[controller]/UpdateDefect")]
-        //public async Task<IActionResult> UpdatePost([FromBody] Defect defect)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        await UpdateControllerMethod.UpdateAsync(defect, _repo);
-        //    }
-        //    return BadRequest();
-        //}
     }
 }

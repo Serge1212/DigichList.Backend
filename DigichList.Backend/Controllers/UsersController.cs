@@ -37,9 +37,7 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> CreateUser(User user)
         {
             await _repo.AddAsync(user);
-            return Created(HttpContext.Request.Scheme + 
-                "://" + HttpContext.Request.Host +
-                HttpContext.Request.Path + "/" + user.Id, user);
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         [HttpPost]

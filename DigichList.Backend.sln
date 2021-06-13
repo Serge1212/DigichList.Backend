@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigichList.Core", "DigichLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigichList.Infrastructure", "DigichList.Data\DigichList.Infrastructure.csproj", "{9320FE01-84DD-406D-9066-D9A008FC54B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigichList.TelegramNotifications", "DigichList.TelegramNotifications\DigichList.TelegramNotifications.csproj", "{00DD2647-F1DE-4F3C-96FE-C50BD4F17637}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigichList.TelegramNotifications", "DigichList.TelegramNotifications\DigichList.TelegramNotifications.csproj", "{00DD2647-F1DE-4F3C-96FE-C50BD4F17637}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigicnList.Backend.Tests", "DigicnList.Backend.Tests\DigicnList.Backend.Tests.csproj", "{FD370B86-84D0-4300-9743-06EE2F782CCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{00DD2647-F1DE-4F3C-96FE-C50BD4F17637}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00DD2647-F1DE-4F3C-96FE-C50BD4F17637}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00DD2647-F1DE-4F3C-96FE-C50BD4F17637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD370B86-84D0-4300-9743-06EE2F782CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD370B86-84D0-4300-9743-06EE2F782CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD370B86-84D0-4300-9743-06EE2F782CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD370B86-84D0-4300-9743-06EE2F782CCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DigichList.Backend.ApiModels;
 using DigichList.Backend.Helpers;
 using DigichList.Backend.ViewModel;
 using DigichList.Core.Entities;
@@ -75,6 +76,9 @@ namespace DigichList.Backend.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(DescriptionResponseApiModel), 404)]
+        [ProducesResponseType(typeof(DescriptionResponseApiModel), 409)]
+        [ProducesResponseType(typeof(ErrorDetails), 500)]
         public async Task<IActionResult> AssignDefect(int userId, int defectId)
         {
             try

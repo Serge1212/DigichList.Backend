@@ -7,6 +7,7 @@ using DigichList.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -34,17 +35,17 @@ namespace DigichList.Backend.Controllers
 
         [HttpGet]
         [Route("api/[controller]/GetRegisteredUsers")]
-        public async Task<IActionResult> GetRegisteredUsers()
+        public IActionResult GetRegisteredUsers()
         {
-            var users = await _repo.GetAsync(x => x.IsRegistered);
+            var users = _repo.GetUsersWithRoles().Where(x => x.IsRegistered);
             return Ok(_mapper.Map<IEnumerable<UserViewModel>>(users));
         }
 
         [HttpGet]
         [Route("api/[controller]/GetUnregisteredUsers")]
-        public async Task<IActionResult> GetUnregisteredUsers()
+        public IActionResult GetUnregisteredUsers()
         {
-            var users = await _repo.GetAsync(x => !x.IsRegistered);
+            var users = _repo.GetUsersWithRoles().Where(x => !x.IsRegistered);
             return Ok(_mapper.Map<IEnumerable<UserViewModel>>(users));
         }
 

@@ -67,25 +67,8 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/UpdateAdmin")]
         public async Task<IActionResult> UpdateAdmin([FromBody] Admin admin)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await _repo.UpdateAsync(admin);
-
-                    return Ok();
-                }
-                catch (Exception ex)
-                {
-                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
-                    {
-                        return NotFound();
-                    }
-
-                    return BadRequest();
-                }
-            }
-            return BadRequest();
+            return await CommonControllerMethods
+                .UpdateAsync(admin, _repo);
         }
 
         [Route("login")]
@@ -110,7 +93,6 @@ namespace DigichList.Backend.Controllers
                 HttpOnly = true,
                 SameSite = SameSiteMode.None,
                 Secure = true,
- //               IsEssential = true,
             });
 
             return Ok(new 

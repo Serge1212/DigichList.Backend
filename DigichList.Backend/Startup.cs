@@ -1,4 +1,5 @@
 using DigichList.Backend.Helpers;
+using DigichList.Backend.Middlewares;
 using DigichList.Backend.Options;
 using DigichList.Core.Repositories;
 using DigichList.Infrastructure.Data;
@@ -50,6 +51,8 @@ namespace DigichList.Backend
                 app.UseDeveloperExceptionPage();
                 
             }
+
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseHttpsRedirection();
 

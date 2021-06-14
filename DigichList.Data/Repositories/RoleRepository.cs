@@ -55,6 +55,7 @@ namespace DigichList.Infrastructure.Repositories
             _context.AssignedDefects.RemoveRange(user.AssignedDefects.Where(x => x.ClosedAt == null));
             user.AssignedDefects = null;
             user.Role = null;
+            user.IsRegistered = false;
             _context.Users.Update(user);
             _context.SaveChanges();
         }

@@ -29,7 +29,7 @@ namespace DigichList.Infrastructure.Repositories
             if(role == null)
                 return false;
             
-            if(user.Role.Name == "Technician")
+            if(user?.Role?.Name == "Technician")
             {
                 _context
                     .AssignedDefects

@@ -37,6 +37,7 @@ namespace DigichList.Infrastructure.Repositories
             }
 
             user.Role = role;
+            user.IsRegistered = true;
             _context.Users.Update(user);
             await SaveChangesAsync();
             return true;

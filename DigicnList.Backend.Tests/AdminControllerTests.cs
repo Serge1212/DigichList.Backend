@@ -1,3 +1,4 @@
+using AutoMapper;
 using DigichList.Backend.Controllers;
 using DigichList.Backend.Helpers;
 using DigichList.Backend.Options;
@@ -23,9 +24,9 @@ namespace DigicnList.Backend.Tests
 
             var repo = new Mock<IAdminRepository>();
             repo.Setup(repo => repo.GetAllAsync()).ReturnsAsync(GetTestAdmins());
-            var authOption = new Mock<IOptions<AuthOptions>>();
+            var mapper = new Mock<IMapper>();
             var jwtService = new Mock<JwtService>();
-            var controller = new AdminController(repo.Object,authOption.Object,jwtService.Object);
+            var controller = new AdminController(repo.Object,jwtService.Object, mapper.Object);
 
             // Act
 

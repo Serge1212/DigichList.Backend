@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using DigichList.Backend.Helpers;
-using DigichList.Backend.Options;
 using DigichList.Backend.ViewModel;
 using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -50,7 +48,7 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]")]
         public async Task<IActionResult> CreateAdmin(Admin admin)
         {
-            admin.Password = BCrypt.Net.BCrypt.HashPassword(admin.Password); //тут хешує пароль і зберігає хеш 
+            admin.Password = BCrypt.Net.BCrypt.HashPassword(admin.Password); 
             await _repo.AddAsync(admin);
             return CreatedAtAction("GetAdmin", new { id = admin.Id }, admin);
         }
@@ -80,7 +78,7 @@ namespace DigichList.Backend.Controllers
             if (admin == null)
                 return BadRequest(new { message = "Invalid Credentials" });
 
-            var passwordsMatch = BCrypt.Net.BCrypt.Verify(request.Password, admin.Password); //тут порівнюється пароль і його хеш
+            var passwordsMatch = BCrypt.Net.BCrypt.Verify(request.Password, admin.Password);
             if (!passwordsMatch)
             {
                 return BadRequest(new { message = "Invalid Credentials" });

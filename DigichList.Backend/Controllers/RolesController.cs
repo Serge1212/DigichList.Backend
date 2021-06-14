@@ -52,7 +52,7 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> CreateRole(Role role)
         {
             await _repo.AddAsync(role);
-            return Ok("The role has been created");
+            return CreatedAtAction("GetRole", new { id = role.Id }, role);
         }
 
         [HttpDelete]

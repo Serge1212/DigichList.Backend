@@ -88,21 +88,21 @@ namespace DigichList.Infrastructure.Seeders
             {
                 new Admin
                 {
-                    Username = "Serge",
+                    FirstName = "Serge",
                     Email = "serge@gmail.com",
                     AccessLevel = Admin.AccessLevels.Admin,
                     Password = BCrypt.Net.BCrypt.HashPassword("123123123")
                 },
                 new Admin
                 {
-                    Username = "Vasyl",
+                    FirstName = "Vasyl",
                     Email = "vasyl@gmail.com",
                     AccessLevel = Admin.AccessLevels.SuperAdmin,
                     Password = BCrypt.Net.BCrypt.HashPassword("234234234")
                 },
                 new Admin
                 {
-                    Username = "Ivan",
+                    FirstName = "Ivan",
                     Email = "ivan@gmail.com",
                     AccessLevel = Admin.AccessLevels.Admin,
                     Password = BCrypt.Net.BCrypt.HashPassword("345345345")
@@ -174,7 +174,7 @@ namespace DigichList.Infrastructure.Seeders
             }
         }
 
-        public async Task SeedAdmins()
+       /* public async Task SeedAdmins()
         {
             var admins = new List<Admin>
             {
@@ -203,7 +203,7 @@ namespace DigichList.Infrastructure.Seeders
 
             await _context.Admins.AddRangeAsync(admins);
             await _context.SaveChangesAsync();
-        }
+        }*/
 
         public async Task SeedDefectImages()
         {
@@ -247,7 +247,7 @@ namespace DigichList.Infrastructure.Seeders
         public async Task SeedDatabase()
         {
             await SeedRoles();
-            await SeedAdmins();
+            //await SeedAdmins();
             await SeedUsers();
             await SeedDefects();
             await SeedDefectImages();

@@ -3,15 +3,17 @@ using System;
 using DigichList.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DigichList.Infrastructure.Migrations
 {
     [DbContext(typeof(DigichListContext))]
-    partial class DigichListContextModelSnapshot : ModelSnapshot
+    [Migration("20210612214504_set null to role in users table when role deleted")]
+    partial class setnulltoroleinuserstablewhenroledeleted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,7 +91,7 @@ namespace DigichList.Infrastructure.Migrations
                     b.Property<int>("RoomNumber")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -198,7 +200,8 @@ namespace DigichList.Infrastructure.Migrations
                     b.HasOne("DigichList.Core.Entities.User", "Publisher")
                         .WithMany("Defects")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Publisher");
                 });

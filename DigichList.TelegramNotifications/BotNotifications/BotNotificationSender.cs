@@ -27,21 +27,27 @@ namespace DigichList.TelegramNotifications.BotNotifications
 
         public async Task NotifyUserGotRole(int telegramId, string roleName)
         {
-            var message = GetRoleInfo(roleName);
+            var message = GetMessageForSpecifiedRole(roleName, UserGotRole);
             await SendMessageAsync(telegramId, message);
         }
 
-        private string GetRoleInfo(string roleName)
+        private string GetMessageForSpecifiedRole(string roleName, string message)
         {
             if (roleName == "Maid")
             {
-                return string.Format(UserGotRole, roleName, UserGotMaidRole);
+                return string.Concat(message, MaidRoleDescription);
             }
             else if(roleName == "Technician")
             {
-                return string.Format(UserGotRole, roleName, UserGotTechnicianRole);
+                return string.Concat(message, TechnicianRoleDescription);
             }
             return string.Empty;
+        }
+
+        public async Task NotifyUserLostRole(int telegramId, string roleName)
+        {
+            var message = GetMessageForSpecifiedRole(roleName, "На жаль, ви втратили наступні повноваження:\n");
+            await SendMessageAsync(telegramId, message);
         }
     }
 }

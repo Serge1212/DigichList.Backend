@@ -10,9 +10,16 @@ namespace DigichList.Infrastructure.Configurations
         {
             builder.HasKey(u => u.Id);
 
-            builder.HasMany(d => d.Defects)
+            builder
+                .HasMany(d => d.Defects)
                 .WithOne(u => u.Publisher)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder
+                .HasMany(a => a.AssignedDefects)
+                .WithOne(u => u.AssignedWorker)
                 .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

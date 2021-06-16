@@ -1,4 +1,5 @@
-﻿using DigichList.Backend.Helpers;
+﻿using AutoMapper;
+using DigichList.Backend.Helpers;
 using DigichList.Backend.Options;
 using DigichList.Backend.ViewModel;
 using DigichList.Core.Entities;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DigichList.Backend.Controllers
@@ -15,30 +17,33 @@ namespace DigichList.Backend.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminRepository _repo;
-        private readonly IOptions<AuthOptions> _authOptions;
         private readonly JwtService _jwtService;
+        private readonly IMapper _mapper;
 
         public AdminController(IAdminRepository repo,
-            IOptions<AuthOptions> authOptions,
-            JwtService jwtService)
+            JwtService jwtService,
+            IMapper mapper)
         {
             _repo = repo;
-            _authOptions = authOptions;
             _jwtService = jwtService;
+            _mapper = mapper;
         }
         [HttpGet]
         [Route("api/[controller]")]
         public async Task<IActionResult> GetAdmins()
         {
-            return Ok(await _repo.GetAllAsync());
+            var admins = await _repo.GetAllAsync();
+            return Ok(_mapper.Map<IEnumerable<AdminViewModel>>(admins));
         }
 
         [HttpGet]
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetAdmin(int id)
         {
-            return await CommonControllerMethods
-                .GetByIdAsync<Admin, IAdminRepository>(id, _repo);
+            var admin = await _repo.GetByIdAsync(id);
+            return admin != null ?
+                Ok(_mapper.Map<AdminViewModel>(admin)) :
+                NotFound($"Admin with id of {id} was not found");
         }
 
         [HttpPost]
@@ -100,13 +105,12 @@ namespace DigichList.Backend.Controllers
 
             var jwt = _jwtService.Generate(admin.Id);
 
-            Response.Cookies.Append("jwt", jwt, new CookieOptions 
+            Response.Cookies.Append("jwt", jwt, new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTimeOffset.UtcNow.AddDays(1).AddMinutes(-5),
                 SameSite = SameSiteMode.None,
-                Secure = true
-                
+                Secure = true,
+ //               IsEssential = true,
             });
 
             return Ok(new 
@@ -130,16 +134,25 @@ namespace DigichList.Backend.Controllers
 
                 return Ok(admin);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                return Unauthorized();
+                return Unauthorized(ex.Message);
             }
         }
 
         [HttpPost("Logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("jwt");
+            CookieOptions options = new()
+            {
+                Expires = DateTime.Today.AddDays(1),
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                HttpOnly = true
+            };
+
+            Response.Cookies.Delete("jwt", options);
+            
 
             return Ok(new
             {

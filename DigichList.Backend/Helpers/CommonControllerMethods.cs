@@ -1,4 +1,5 @@
-﻿using DigichList.Core.Repositories.Base;
+﻿using DigichList.Core.Entities.Base;
+using DigichList.Core.Repositories.Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +9,7 @@ namespace DigichList.Backend.Helpers
 {
     public static class CommonControllerMethods
     {
-        public static async Task<IActionResult> UpdateAsync<R, T>(T entity, R repo) 
+        public static async Task<IActionResult> UpdateAsync<R, T>(T entity, R repo)
             where R : IRepository<T, int>
         {
             try
@@ -27,14 +28,15 @@ namespace DigichList.Backend.Helpers
             }
         }
 
-        public static async Task<IActionResult> GetByIdAsync<T, R>(int id, R repo) 
-            where R : IRepository<T, int>
+        public static async Task<IActionResult> GetEntityByIdAsync<TEntity, TRepo>(int id, TRepo repo) 
+            where TRepo : IRepository<TEntity, int>
         {
-            T entity = await repo.GetByIdAsync(id);
-            
+
+            TEntity entity = await repo.GetByIdAsync(id);
+
             return entity != null ?
                 new OkObjectResult(entity) :
-                new NotFoundObjectResult($"{typeof(T)} with id {id} was not found");
+                new NotFoundObjectResult($"{typeof(TEntity)} with id {id} was not found");
         }
 
         public static async Task<IActionResult> DeleteAsync<T, R>(int id, R repo)

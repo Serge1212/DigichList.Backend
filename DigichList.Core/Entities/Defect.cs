@@ -12,7 +12,7 @@ namespace DigichList.Core.Entities
         [Required]
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public User Publisher { get; set; }
         public AssignedDefect AssignedDefect { get; set; }
         public List<DefectImage> DefectImages { get; set; } = new List<DefectImage>();

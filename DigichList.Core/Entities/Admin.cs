@@ -14,7 +14,7 @@ namespace DigichList.Core.Entities
 
         public enum AccessLevels
         {
-            Admin,
+            Admin = 1,
             SuperAdmin
         }
     }

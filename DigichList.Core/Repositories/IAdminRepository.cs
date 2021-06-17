@@ -8,5 +8,6 @@ namespace DigichList.Core.Repositories
     {
         public Task<Admin> GetAdminByEmail(string email);
         public Task DeleteRangeAsync(int[] idArr);
+        public Task<Admin> GetAdminForChangePassword(int id, string password);
     }
 }

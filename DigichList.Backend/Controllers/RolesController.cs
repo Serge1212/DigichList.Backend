@@ -86,9 +86,13 @@ namespace DigichList.Backend.Controllers
                 return NotFound("Cannot assign a role to nonexistent user");
             }
 
-            return (await _repo.AssignRole(user, roleId)) ?
-                Ok() :
-                NotFound("User or role was not found");
+            if(await _repo.AssignRole(user, roleId))
+            {
+                await _botNotificationSender.NotifyUserGotRole(user.TelegramId, user?.Role?.Name);
+                return Ok();
+            }
+
+            return NotFound("User or role was not found");
 
         }
 

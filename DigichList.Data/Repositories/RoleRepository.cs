@@ -4,7 +4,6 @@ using DigichList.Infrastructure.Data;
 using DigichList.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace DigichList.Infrastructure.Repositories

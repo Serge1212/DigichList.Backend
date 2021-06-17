@@ -94,5 +94,16 @@ namespace DigichList.Backend.Controllers
         {
            return await CommonControllerMethods.DeleteAsync<User, IUserRepository>(id, _repo);
         }
+
+        [HttpDelete("DeleteUsers")]
+        public async Task<IActionResult> DeleteUsers([FromQuery(Name = "idArr")] int[] idArr)
+        {
+            if (idArr.Length < 1)
+            {
+                return NotFound("There wasn't any id provided to delete");
+            }
+            await _repo.DeleteRangeAsync(idArr);
+            return Ok();
+        }
     }
 }

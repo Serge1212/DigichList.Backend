@@ -21,5 +21,7 @@ namespace DigichList.Core.Repositories
 
         public Task<User> GetUserWithRolesAndAssignedDefectsByIdAsync(int id);
 
+        public Task DeleteRangeAsync(int[] idArr);
+
     }
 }

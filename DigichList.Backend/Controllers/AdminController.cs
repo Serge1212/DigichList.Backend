@@ -61,6 +61,17 @@ namespace DigichList.Backend.Controllers
                 .DeleteAsync<Admin, IAdminRepository>(id, _repo);
         }
 
+        [HttpDelete("DeleteAdmins")]
+        public async Task<IActionResult> DeleteAdmins([FromQuery(Name = "idArr")] int[] idArr)
+        {
+            if (idArr.Length < 1)
+            {
+                return NotFound("There wasn't any id provided to delete");
+            }
+            await _repo.DeleteRangeAsync(idArr);
+            return Ok();
+        }
+
         [HttpPost]
         [Route("api/[controller]/UpdateAdmin")]
         public async Task<IActionResult> UpdateAdmin([FromBody] Admin admin)

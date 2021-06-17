@@ -1,6 +1,9 @@
-﻿using DigichList.Backend.Controllers;
+﻿using AutoMapper;
+using DigichList.Backend.Controllers;
 using DigichList.Backend.Helpers;
+using DigichList.Backend.Mappers;
 using DigichList.Backend.Options;
+using DigichList.Backend.ViewModel;
 using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -15,23 +18,38 @@ namespace DigicnList.Backend.Tests
 {
     public class UsersControlelrTests
     {
+
+        private static IMapper _mapper;
+        private Mock<IUserRepository> _repo;
+
+        public UsersControlelrTests()
+        {
+            _repo = new Mock<IUserRepository>();
+            if (_mapper == null)
+            {
+                var mappingConfig = new MapperConfiguration(mc =>
+                {
+                    mc.AddProfile(new UserMapperProfile());
+                });
+                IMapper mapper = mappingConfig.CreateMapper();
+                _mapper = mapper;
+            }
+            _repo.Setup(repo => repo.GetAllAsync()).ReturnsAsync(GetTestUsers());
+        }
+
         [Fact]
-        public async Task GetUsers_Returns_The_Correct_Number_Of_Users()
+        public void GetUsers_Returns_The_Correct_Number_Of_Users()
         {
 
             // Arrange
-
-            var repo = new Mock<IUserRepository>();
-            repo.Setup(repo => repo.GetAllAsync()).ReturnsAsync(GetTestUsers());
-            var controller = new UsersController(repo.Object);
+            var controller = new UsersController(_repo.Object, _mapper);
 
             // Act
-
-            var result = await controller.GetUsers();
+            var result = controller.GetUsers();
 
             // Assert
             var viewResult = Assert.IsType<OkObjectResult>(result);
-            var model = Assert.IsAssignableFrom<IEnumerable<User>>(viewResult.Value);
+            var model = Assert.IsAssignableFrom<IEnumerable<UserViewModel>>(viewResult.Value);
             Assert.Equal(GetTestUsers().Count, model.Count());
         }
         private List<User> GetTestUsers()
@@ -48,22 +66,16 @@ namespace DigicnList.Backend.Tests
         public async Task GetUser_Returns_Correct_User()
         {
             // Arrange
-
             int id = 2;
-            var repo = new Mock<IUserRepository>();
-            repo.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync(GetTestUsers().FirstOrDefault(a => a.Id == id));
-            var authOption = new Mock<IOptions<AuthOptions>>();
-            var jwtService = new Mock<JwtService>();
-            var controller = new UsersController(repo.Object);
+            _repo.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync(GetTestUsers().FirstOrDefault(a => a.Id == id));
+            var controller = new UsersController(_repo.Object, _mapper);
 
             // Act
-
             var result = await controller.GetUser(id);
 
             //Assert
-
             var viewResult = Assert.IsType<OkObjectResult>(result);
-            var model = Assert.IsType<User>(viewResult.Value);
+            var model = Assert.IsType<UserViewModel>(viewResult.Value);
 
             Assert.Equal(id, model.Id);
         }
@@ -71,9 +83,7 @@ namespace DigicnList.Backend.Tests
         public async Task Task_Add_ValidData_Return_CreatedAtActionResult()
         {
             //Arrange  
-            var repo = new Mock<IUserRepository>();
-            repo.Setup(repo => repo.GetAllAsync()).ReturnsAsync(GetTestUsers());
-            var controller = new UsersController(repo.Object);
+            var controller = new UsersController(_repo.Object, _mapper);
             var user = new User() { FirstName = "user", RoleId = 1 };
 
             //Act  

@@ -3,6 +3,8 @@ using DigichList.Core.Repositories;
 using DigichList.Infrastructure.Data;
 using DigichList.Infrastructure.Extensions;
 using DigichList.Infrastructure.Repositories.Base;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +30,24 @@ namespace DigichList.Infrastructure.Repositories
         public async Task<Admin> GetAdminByEmail(string email)
         {
             return await _context.Admins.GetAdminByEmail(email);
+        }
+        public async Task<Admin> GetAdminForChangePassword(int id, string password)
+        {
+            var admin = await _context.Admins.FirstOrDefaultAsync(x => x.Id == id);
+            if (admin == null)
+            {
+                throw new ArgumentException($"Cannot find admin with id: {id}");
+            }
+
+            if (password == null)
+            {
+                throw new ArgumentException("Password is null");
+            }
+
+            else
+            {
+                return admin;
+            }
         }
     }
 }

@@ -73,6 +73,23 @@ namespace DigichList.Backend.Controllers
         }
 
         [HttpPost]
+        [Route("api/[controller]/UpdateAdminPassword")]
+        public async Task<IActionResult> UpdateAdminPassword([FromBody] ChangeAdminPasswordViewModel changePassword)
+        {
+            try
+            {
+                var admin = await _repo.GetAdminForChangePassword(changePassword.Id, changePassword.Password);
+                admin.Password = BCrypt.Net.BCrypt.HashPassword(changePassword.Password);
+                await _repo.UpdateAsync(admin);
+                return Ok();
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
         [Route("api/[controller]/UpdateAdmin")]
         public async Task<IActionResult> UpdateAdmin([FromBody] Admin admin)
         {

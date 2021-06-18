@@ -14,7 +14,7 @@
       "launchBrowser": true,
       "launchUrl": "api/users",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       }
     },
     "DigichList.Backend": {

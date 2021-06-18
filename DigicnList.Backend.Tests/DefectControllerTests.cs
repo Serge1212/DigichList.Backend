@@ -19,11 +19,13 @@ namespace DigicnList.Backend.Tests
 
         private static IMapper _mapper;
         private Mock<IDefectRepository> _repo;
+        private Mock<IUserRepository> _userRepo;
         private Mock<IBotNotificationSender> _iBotNotificationSender;
 
         public DefectControllerTests()
         {
             _repo = new Mock<IDefectRepository>();
+            _userRepo = new Mock<IUserRepository>();
             _iBotNotificationSender = new Mock<IBotNotificationSender>();
             if (_mapper == null)
             {
@@ -43,7 +45,7 @@ namespace DigicnList.Backend.Tests
 
             // Arrange
 
-            var controller = new DefectController(_repo.Object, _iBotNotificationSender.Object, _mapper);
+            var controller = new DefectController(_repo.Object, _userRepo.Object, _iBotNotificationSender.Object, _mapper);
 
             // Act
 
@@ -71,7 +73,7 @@ namespace DigicnList.Backend.Tests
             // Arrange
 
             int id = 2;
-            var controller = new DefectController(_repo.Object, _iBotNotificationSender.Object, _mapper);
+            var controller = new DefectController(_repo.Object, _userRepo.Object, _iBotNotificationSender.Object, _mapper);
 
             // Act
 
@@ -90,7 +92,7 @@ namespace DigicnList.Backend.Tests
         {
             //Arrange  
 
-            var controller = new DefectController(_repo.Object, _iBotNotificationSender.Object, _mapper);
+            var controller = new DefectController(_repo.Object, _userRepo.Object, _iBotNotificationSender.Object, _mapper);
             var id = 9999;
 
             //Act  

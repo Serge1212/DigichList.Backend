@@ -54,8 +54,9 @@ namespace DigichList.Backend.Controllers
         public async Task<IActionResult> UpdateDefect([FromBody]DefectViewModel defectViewModel)
         {
             var defect = await _repo.GetDefectWithAssignedDefectByIdAsync(defectViewModel.Id);
-
-            await _repo.UpdateAsync(defect);
+            defect.Description = defectViewModel.Description;
+            defect.RoomNumber = defectViewModel.RoomNumber;
+            defect.AssignedDefect.Status = (Status)Enum.Parse(typeof(Status), defectViewModel.DefectStatus);
 
             var worker = await _userRepo.GetByIdAsync(defectViewModel.AssignedWorkerId);
             if(worker!= null)

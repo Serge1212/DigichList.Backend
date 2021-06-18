@@ -15,7 +15,7 @@ namespace DigichList.Infrastructure.Data
                 var password = Environment.GetEnvironmentVariable("POSTGRES_LOCAL_PASSWORD", EnvironmentVariableTarget.User);
 
                 optionsBuilder.UseNpgsql($"Server=127.0.0.1; port=5432; user id={userid}; password={password};" +
-                    $"database=DigichListDb; pooling=true");
+                    $"database=DigichListDb; pooling=true; Maximum Pool Size=100");
             }
             else
             {

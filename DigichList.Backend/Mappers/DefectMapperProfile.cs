@@ -12,7 +12,11 @@ namespace DigichList.Backend.Mappers
                 .ForMember(x => x.CreatedAt, y => y.MapFrom(src => src.CreatedAt.ToShortDateString()))
                 .ForMember(x => x.Publisher, y => y.MapFrom(src => src.Publisher.ToString()))
                 .ForMember(x => x.UserThatFixesDefect, y => y.MapFrom(src => src.AssignedDefect.AssignedWorker.ToString()))
-                .ForMember(x => x.DefectStatus, y => y.MapFrom(src => src.AssignedDefect.Status.ToString()));
+                .ForMember(x => x.DefectStatus, y => 
+                {
+                    y.MapFrom(src => src.AssignedDefect.Status.ToString());
+                    y.NullSubstitute("Not Assigned");
+                });
         }
     }
 }

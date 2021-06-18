@@ -4,7 +4,6 @@ using DigichList.Infrastructure.Data;
 using DigichList.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace DigichList.Infrastructure.Repositories
@@ -29,7 +28,7 @@ namespace DigichList.Infrastructure.Repositories
             if(role == null)
                 return false;
             
-            if(user.Role.Name == "Technician")
+            if(user?.Role?.Name == "Technician")
             {
                 _context
                     .AssignedDefects
@@ -37,6 +36,7 @@ namespace DigichList.Infrastructure.Repositories
             }
 
             user.Role = role;
+            user.IsRegistered = true;
             _context.Users.Update(user);
             await SaveChangesAsync();
             return true;
@@ -55,6 +55,7 @@ namespace DigichList.Infrastructure.Repositories
             _context.AssignedDefects.RemoveRange(user.AssignedDefects.Where(x => x.ClosedAt == null));
             user.AssignedDefects = null;
             user.Role = null;
+            user.IsRegistered = false;
             _context.Users.Update(user);
             _context.SaveChanges();
         }

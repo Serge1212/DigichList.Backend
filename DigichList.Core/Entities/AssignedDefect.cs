@@ -7,7 +7,7 @@ namespace DigichList.Core.Entities
     {
         Opened = 1,
         Fixing,
-        Done
+        Solved
     }
     public class AssignedDefect : Entity
     {

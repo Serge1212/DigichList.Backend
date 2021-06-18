@@ -5,6 +5,7 @@ using DigichList.Core.Entities;
 using DigichList.Core.Repositories;
 using DigichList.TelegramNotifications.BotNotifications;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -85,9 +86,13 @@ namespace DigichList.Backend.Controllers
                 return NotFound("Cannot assign a role to nonexistent user");
             }
 
-            return (await _repo.AssignRole(user, roleId)) ?
-                Ok() :
-                NotFound("User or role was not found");
+            if(await _repo.AssignRole(user, roleId))
+            {
+                await _botNotificationSender.NotifyUserGotRole(user.TelegramId, user?.Role?.Name);
+                return Ok();
+            }
+
+            return NotFound("User or role was not found");
 
         }
 
@@ -105,7 +110,14 @@ namespace DigichList.Backend.Controllers
             var ok = _repo.RemoveRoleFromUser(user);
             if (ok)
             {
-                await _botNotificationSender.NotifyUserLostRole(user.TelegramId, roleName);
+                try
+                {
+                    await _botNotificationSender.NotifyUserLostRole(user.TelegramId, roleName);
+                }
+                catch(Exception ex)
+                {
+                    return Ok("Cound not send a message to user in telegram " + ex.Message);
+                }
                 return Ok();
             }
             else

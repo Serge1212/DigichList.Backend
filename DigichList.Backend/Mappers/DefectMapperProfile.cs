@@ -19,7 +19,9 @@ namespace DigichList.Backend.Mappers
                     y => y.MapFrom(src => src.AssignedDefect.AssignedWorker.ToString()))
 
                 .ForMember(x => x.StatusChangedAt,
-                    y => y.MapFrom(src => src.AssignedDefect.StatusChangedAt.Value.ToShortDateString()))
+                    y => y.MapFrom(src => src.AssignedDefect.StatusChangedAt.HasValue ?
+                    src.AssignedDefect.StatusChangedAt.Value.ToShortDateString() :
+                    "N/A"))
 
                 .ForMember(x => x.DefectStatus, y => 
                 {

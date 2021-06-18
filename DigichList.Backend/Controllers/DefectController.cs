@@ -17,14 +17,17 @@ namespace DigichList.Backend.Controllers
     public class DefectController : ControllerBase
     {
         private readonly IDefectRepository _repo;
+        private readonly IUserRepository _userRepo;
         private readonly IBotNotificationSender _botNotificationSender;
         private readonly IMapper _mapper;
 
         public DefectController(IDefectRepository repo,
+            IUserRepository userRepo,
             IBotNotificationSender sender,
             IMapper mapper)
         {
             _repo = repo;
+            _userRepo = userRepo;
             _botNotificationSender = sender;
             _mapper = mapper;
         }
@@ -48,11 +51,18 @@ namespace DigichList.Backend.Controllers
 
         [HttpPost]
         [Route("UpdateDefect")]
-        public async Task<IActionResult> UpdateDefect([FromBody] Defect defect)
+        public async Task<IActionResult> UpdateDefect([FromBody]DefectViewModel defectViewModel)
         {
-            if (ModelState.IsValid)
+            var defect = await _repo.GetDefectWithAssignedDefectByIdAsync(defectViewModel.Id);
+
+            await _repo.UpdateAsync(defect);
+
+            var worker = await _userRepo.GetByIdAsync(defectViewModel.AssignedWorkerId);
+            if(worker!= null)
             {
-                return await CommonControllerMethods.UpdateAsync(defect, _repo);
+                defect.AssignedDefect.AssignedWorker = worker;
+                await _repo.UpdateAsync(defect);
+                return Ok();
             }
             return BadRequest();
         }

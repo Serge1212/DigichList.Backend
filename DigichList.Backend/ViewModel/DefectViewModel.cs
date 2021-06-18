@@ -10,6 +10,6 @@
         public string UserThatFixesDefect { get; set; }
         public int AssignedWorkerId { get; set; }
         public string DefectStatus { get; set; }
-        public string StatusChangedAt { get; set; }
+        
     }
 }

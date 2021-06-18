@@ -16,7 +16,7 @@ namespace DigichList.Backend.Mappers
                 {
                     y.MapFrom(src => src.AssignedDefect.Status.ToString());
                     y.NullSubstitute("Not Assigned");
-                });
+                }).ReverseMap();
         }
     }
 }

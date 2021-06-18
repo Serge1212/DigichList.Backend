@@ -12,6 +12,7 @@ namespace DigichList.Infrastructure.Extensions
         {
             return await defects
                 .Include(a => a.AssignedDefect)
+                .ThenInclude(w => w.AssignedWorker)
                 .FirstOrDefaultAsync(x => x.Id == defectId);
         }
 

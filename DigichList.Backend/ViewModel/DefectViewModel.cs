@@ -8,6 +8,8 @@
         public int RoomNumber { get; set; }
         public string Publisher { get; set; }
         public string UserThatFixesDefect { get; set; }
+        public int AssignedWorkerId { get; set; }
         public string DefectStatus { get; set; }
+        
     }
 }

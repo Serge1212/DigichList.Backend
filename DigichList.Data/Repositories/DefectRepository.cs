@@ -57,7 +57,8 @@ namespace DigichList.Infrastructure.Repositories
                 var assignedDefect = new AssignedDefect
                 {
                     AssignedWorker = user,
-                    Defect = defect
+                    Defect = defect,
+                    StatusChangedAt = DateTime.Now
                 };
 
                 return assignedDefect;

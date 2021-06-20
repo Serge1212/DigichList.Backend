@@ -98,7 +98,13 @@ namespace DigichList.Backend.Controllers
                 if (assignedDefect != null)
                 {
                     await _repo.SaveAssignedDefect(assignedDefect);
-                    await _botNotificationSender.NotifyUserWasGivenWithDefect(assignedDefect.AssignedWorker.TelegramId, assignedDefect.Defect);
+
+                    await _botNotificationSender.NotifyUserWasGivenWithDefect
+                        (
+                        assignedDefect.AssignedWorker.TelegramId,
+                        assignedDefect.Defect
+                        );
+
                     return Ok($"The defect was assigned successfully to {assignedDefect.AssignedWorker.FirstName} {assignedDefect.AssignedWorker?.LastName}");
                 }
                 else

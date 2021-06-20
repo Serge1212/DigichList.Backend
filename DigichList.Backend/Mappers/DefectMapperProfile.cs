@@ -9,9 +9,20 @@ namespace DigichList.Backend.Mappers
         public DefectMapperProfile()
         {
             CreateMap<Defect, DefectViewModel>()
-                .ForMember(x => x.CreatedAt, y => y.MapFrom(src => src.CreatedAt.ToShortDateString()))
-                .ForMember(x => x.Publisher, y => y.MapFrom(src => src.Publisher.ToString()))
-                .ForMember(x => x.UserThatFixesDefect, y => y.MapFrom(src => src.AssignedDefect.AssignedWorker.ToString()))
+                .ForMember(x => x.CreatedAt, 
+                    y => y.MapFrom(src => src.CreatedAt.ToShortDateString()))
+                
+                .ForMember(x => x.Publisher, 
+                    y => y.MapFrom(src => src.Publisher.ToString()))
+
+                .ForMember(x => x.UserThatFixesDefect, 
+                    y => y.MapFrom(src => src.AssignedDefect.AssignedWorker.ToString()))
+
+                .ForMember(x => x.StatusChangedAt,
+                    y => y.MapFrom(src => src.AssignedDefect.StatusChangedAt.HasValue ?
+                    src.AssignedDefect.StatusChangedAt.Value.ToShortDateString() :
+                    "N/A"))
+
                 .ForMember(x => x.DefectStatus, y => 
                 {
                     y.MapFrom(src => src.AssignedDefect.Status.ToString());

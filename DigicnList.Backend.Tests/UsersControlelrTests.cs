@@ -36,22 +36,6 @@ namespace DigicnList.Backend.Tests
             }
             _repo.Setup(repo => repo.GetAllAsync()).ReturnsAsync(GetTestUsers());
         }
-
-        [Fact]
-        public void GetUsers_Returns_The_Correct_Number_Of_Users()
-        {
-
-            // Arrange
-            var controller = new UsersController(_repo.Object, _mapper);
-
-            // Act
-            var result = controller.GetUsers();
-
-            // Assert
-            var viewResult = Assert.IsType<OkObjectResult>(result);
-            var model = Assert.IsAssignableFrom<IEnumerable<UserViewModel>>(viewResult.Value);
-            Assert.Equal(GetTestUsers().Count, model.Count());
-        }
         private List<User> GetTestUsers()
         {
             var admins = new List<User>
@@ -62,23 +46,7 @@ namespace DigicnList.Backend.Tests
             };
             return admins;
         }
-        [Fact]
-        public async Task GetUser_Returns_Correct_User()
-        {
-            // Arrange
-            int id = 2;
-            _repo.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync(GetTestUsers().FirstOrDefault(a => a.Id == id));
-            var controller = new UsersController(_repo.Object, _mapper);
 
-            // Act
-            var result = await controller.GetUser(id);
-
-            //Assert
-            var viewResult = Assert.IsType<OkObjectResult>(result);
-            var model = Assert.IsType<UserViewModel>(viewResult.Value);
-
-            Assert.Equal(id, model.Id);
-        }
         [Fact]
         public async Task Task_Add_ValidData_Return_CreatedAtActionResult()
         {

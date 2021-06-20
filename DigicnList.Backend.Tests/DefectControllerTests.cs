@@ -38,25 +38,6 @@ namespace DigicnList.Backend.Tests
             }
             _repo.Setup(repo => repo.GetAllAsync()).ReturnsAsync(GetTestDefects());
         }
-
-        [Fact]
-        public  void GetDefects_Returns_The_Correct_Number_Of_Defects()
-        {
-
-            // Arrange
-
-            var controller = new DefectController(_repo.Object, _userRepo.Object, _iBotNotificationSender.Object, _mapper);
-
-            // Act
-
-            var result = controller.GetDefects();
-
-            // Assert
-
-            var viewResult = Assert.IsType<OkObjectResult>(result);
-            var model = Assert.IsAssignableFrom<IEnumerable<DefectViewModel>>(viewResult.Value);
-            Assert.Equal(GetTestDefects().Count, model.Count());
-        }
         private List<Defect> GetTestDefects()
         {
             var defects = new List<Defect>
@@ -66,25 +47,6 @@ namespace DigicnList.Backend.Tests
                 new Defect { Id=3, UserId = 3, RoomNumber = 3 },
             };
             return defects;
-        }
-        [Fact]
-        public async Task GetDefect_Returns_Correct_Defect()
-        {
-            // Arrange
-
-            int id = 2;
-            var controller = new DefectController(_repo.Object, _userRepo.Object, _iBotNotificationSender.Object, _mapper);
-
-            // Act
-
-            var result = await controller.GetDefect(id);
-
-            //Assert
-
-            var viewResult = Assert.IsType<OkObjectResult>(result);
-            var model = Assert.IsType<Defect>(viewResult.Value);
-
-            Assert.Equal(id, model.Id);
         }
 
         [Fact]

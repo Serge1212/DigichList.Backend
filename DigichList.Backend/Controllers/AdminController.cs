@@ -93,8 +93,13 @@ namespace DigichList.Backend.Controllers
         [Route("api/[controller]/UpdateAdmin")]
         public async Task<IActionResult> UpdateAdmin([FromBody] Admin admin)
         {
-            return await CommonControllerMethods
-                .UpdateAsync(admin, _repo);
+                var existingAdmin = await _repo.GetByIdAsync(admin.Id);
+                existingAdmin.FirstName = admin.FirstName;
+                existingAdmin.LastName = admin.LastName;
+                existingAdmin.Email = admin.Email;
+                existingAdmin.AccessLevel = admin.AccessLevel;
+                return await CommonControllerMethods
+                .UpdateAsync(existingAdmin, _repo);
         }
 
         [Route("login")]

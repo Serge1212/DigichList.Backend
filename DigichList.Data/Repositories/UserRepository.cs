@@ -3,6 +3,7 @@ using DigichList.Core.Repositories;
 using DigichList.Infrastructure.Data;
 using DigichList.Infrastructure.Extensions;
 using DigichList.Infrastructure.Repositories.Base;
+using DigichList.TelegramNotifications.BotNotifications;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,11 @@ namespace DigichList.Infrastructure.Repositories
 {
     public class UserRepository : Repository<User, int>, IUserRepository
     {
-        public UserRepository(DigichListContext context) : base(context) { }
+        private readonly IBotNotificationSender _botNotificationSender;
+        public UserRepository(DigichListContext context, IBotNotificationSender botNotificationSender = null) : base(context) 
+        {
+            _botNotificationSender = botNotificationSender;
+        }
 
 
         public async Task<User> GetUserByTelegramIdAsync(int telegramId)
@@ -50,13 +55,22 @@ namespace DigichList.Infrastructure.Repositories
 
         public async Task DeleteRangeAsync(int[] idArr)
         {
-            var defectsToDelete = GetRangeByIds(idArr);
-            _context.RemoveRange(defectsToDelete);
+            var usersToDelete = GetRangeByIds(idArr);
+            _context.RemoveRange(usersToDelete);
+            await NotifyUsersTheyWereRemovedFromDatabase(usersToDelete);
             await SaveChangesAsync();
         }
         public IEnumerable<User> GetRangeByIds(int[] idArr)
         {
             return _context.Users.Where(d => idArr.Contains(d.Id));
+        }
+
+        private async Task NotifyUsersTheyWereRemovedFromDatabase(IEnumerable<User> usersToDelete)
+        {
+            foreach(var u in usersToDelete)
+            {
+                await _botNotificationSender.NotifyUserIsOrIsNotRegistered(u.TelegramId, false);
+            }
         }
     }
 }
